@@ -1,0 +1,20 @@
+{
+  "name": "@orbitsphere/rental",
+  "type": "module",
+  "main": "src/index.ts",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@orbitsphere/orbiter": "workspace:*",
+    "dotenv": "^16.4.7",
+    "viem": "^2.23.7"
+  }
+}
