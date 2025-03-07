@@ -4,7 +4,9 @@
   "main": "src/index.ts",
   "private": true,
   "scripts": {
-    "start": "bun run src/index.ts"
+    "start": "bun run dist/index.js",
+    "dev": "bun run src/index.ts --watch",
+    "build": "bun build src/index.ts --outdir ./dist --target bun"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -14,7 +16,6 @@
   },
   "dependencies": {
     "@orbitsphere/orbiter": "workspace:*",
-    "dotenv": "^16.4.7",
-    "viem": "^2.23.7"
+    "dotenv": "^16.4.7"
   }
 }

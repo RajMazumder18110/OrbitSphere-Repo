@@ -8,3 +8,12 @@ rent:
 
 terminate:
 	@cast send 0x972b861ebBf74583F2F27C42d11132b03EB8d493 "terminateOrbitSphereInstance(uint256)" $(id) --account orbitsphere --rpc-url $(BLOCKCHAIN_RPC_ENDPOINT)
+
+
+# Docker builds
+build:
+	@echo "Builing micro services..."
+	@bun run --filter "*" build
+
+	@echo "Builing docker images..."
+	@docker build -t raj18110mazumder/orbitsphere-rental-service:latest -f services/rental/Dockerfile services/rental
