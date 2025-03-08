@@ -11,7 +11,10 @@ terminate:
 
 
 dev:
-	@bun run --filter "*" dev
+	@bunx dotenv -e .env -- bun run --filter "*" dev 
+
+dev-rental:
+	@bun run --filter "@orbitsphere/rental" dev
 
 # Docker builds
 build:

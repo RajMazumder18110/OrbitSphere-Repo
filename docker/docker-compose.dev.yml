@@ -1,7 +1,3 @@
-networks:
-  orbitsphere:
-    driver: bridge
-
 services:
   orbitsphere-database:
     image: postgres:alpine
@@ -12,23 +8,3 @@ services:
       - 5432:5432
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
-    networks:
-      - orbitsphere
-
-  rental-listener:
-    depends_on:
-      - orbitsphere-database
-    image: raj18110mazumder/orbitsphere-rental-service:latest
-    env_file: ../.env
-    environment:
-      - POSTGRES_HOST=orbitsphere-database
-    networks:
-      - orbitsphere
-
-  terminate-listener:
-    depends_on:
-      - orbitsphere-database
-    image: raj18110mazumder/orbitsphere-termination-service:latest
-    env_file: ../.env
-    networks:
-      - orbitsphere
