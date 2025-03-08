@@ -2,3 +2,6 @@ services:
   rental-listener:
     image: raj18110mazumder/orbitsphere-rental-service:latest
     env_file: .env
+  terminate-listener:
+    image: raj18110mazumder/orbitsphere-termination-service:latest
+    env_file: .env
