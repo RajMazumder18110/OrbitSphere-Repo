@@ -1,13 +1,10 @@
-/** @notice Library imports */
-import type { Hex } from "viem";
-
 /// Types
 export type LaunchInstanceParams = {
-  region: Hex;
-  sshPublicKey: Hex;
-  instanceType: Hex;
+  region: string;
+  sshPublicKey: string;
+  instanceType: string;
 };
 export type RunningInstanceParams = {
-  region: Hex;
+  region: string;
   instanceId: string;
 };
