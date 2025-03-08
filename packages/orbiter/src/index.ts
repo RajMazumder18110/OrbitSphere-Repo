@@ -55,5 +55,10 @@ class OrbitSphere {
   }
 }
 
+const fromBytes32 = (value: string) => {
+  const data = toUtf8String(value);
+  return data.substring(0, data.indexOf("\u0000"));
+};
+
 /** @notice Exports */
-export { OrbitSphere, orbitSphereAbi, toUtf8String };
+export { OrbitSphere, orbitSphereAbi, fromBytes32 };
