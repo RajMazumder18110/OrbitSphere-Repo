@@ -19,7 +19,10 @@ export class OrbitSphereEventsHandler extends OrbitSphereDatabase {
         .values({ address: data.tenant.toLowerCase() })
         .onConflictDoNothing();
       /// Create OrbitSphereInstanceRented log
-      await tx.insert(rentalLogsTable).values(data);
+      await tx.insert(rentalLogsTable).values({
+        ...data,
+        tenant: data.tenant.toLowerCase(),
+      });
     });
   }
 
@@ -30,7 +33,10 @@ export class OrbitSphereEventsHandler extends OrbitSphereDatabase {
   }
 
   public recordTerminationLog(data: CreateTerminationLogParams) {
-    return this.orbitSphereDatabase.insert(terminateLogsTable).values(data);
+    return this.orbitSphereDatabase.insert(terminateLogsTable).values({
+      ...data,
+      tenant: data.tenant.toLowerCase(),
+    });
   }
 
   public getLastestTerminationLog() {
