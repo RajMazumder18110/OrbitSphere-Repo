@@ -15,7 +15,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@orbitsphere/orbiter": "workspace:*",
-    "dotenv": "^16.4.7"
+    "@orbitsphere/database": "workspace:*",
+    "@orbitsphere/orbiter": "workspace:*"
   }
 }
