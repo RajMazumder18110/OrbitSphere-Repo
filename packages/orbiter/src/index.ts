@@ -26,8 +26,8 @@ class OrbitSphere {
 
   public onOrbitSphereInstanceRented(
     listener: (
-      region: bigint,
-      sphereId: string,
+      region: string,
+      sphereId: bigint,
       instanceType: string,
       sshPublicKey: string,
       rentedOn: bigint,
