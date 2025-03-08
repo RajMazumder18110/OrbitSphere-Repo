@@ -9,7 +9,6 @@ import {
   type StopInstancesCommandInput,
   type TerminateInstancesCommandInput,
 } from "@aws-sdk/client-ec2";
-import { fromHex } from "viem";
 /// Local imports
 import {
   AWSImageIds,
@@ -37,9 +36,9 @@ class OrbitSphereAWSInstance {
       ImageId: AWSImageIds.UBUNTU,
       SecurityGroupIds: [AWSSecurityGroups.EXPOSE_EVERYTHING],
       UserData: Buffer.from(
-        getCustomSSHKeySetupCommand(fromHex(data.sshPublicKey, "string"))
+        getCustomSSHKeySetupCommand(data.sshPublicKey)
       ).toString("base64"),
-      InstanceType: fromHex(data.instanceType, "string") as _InstanceType,
+      InstanceType: data.instanceType as _InstanceType,
     };
 
     /// Running instance

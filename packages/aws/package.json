@@ -13,7 +13,6 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@aws-sdk/client-ec2": "^3.764.0",
-    "viem": "^2.23.8"
+    "@aws-sdk/client-ec2": "^3.764.0"
   }
 }
