@@ -1,0 +1,24 @@
+{
+  "name": "@orbitsphere/database",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    "./schemas": "./src/schemas/index.ts",
+    "./handlers": "./src/handlers/index.ts"
+  },
+  "scripts": {
+    "db:push": "drizzle-kit push"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.11.11",
+    "drizzle-kit": "^0.30.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.40.0",
+    "pg": "^8.13.3"
+  }
+}
