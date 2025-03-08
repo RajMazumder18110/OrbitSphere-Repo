@@ -8,9 +8,9 @@ import {
   type CreateRentalLogParams,
   type CreateTerminationLogParams,
 } from "@/schemas";
-import OrbitSphereDatabase from "./OrbitSphereBase";
+import OrbitSphereBase from "./OrbitSphereBase";
 
-export class OrbitSphereEventsHandler extends OrbitSphereDatabase {
+export class OrbitSphereEventsHandler extends OrbitSphereBase {
   public recordRentalLog(data: CreateRentalLogParams) {
     return this.orbitSphereDatabase.transaction(async (tx) => {
       /// Create tenant first if doesn't present
