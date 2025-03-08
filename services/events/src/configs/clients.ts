@@ -1,6 +1,10 @@
 /** @notice Library imports */
 import { OrbitSphere } from "@orbitsphere/orbiter";
-import { OrbitSphereEventsHandler } from "@orbitsphere/database/handlers";
+import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
+import {
+  OrbitSphereRentalQueue,
+  OrbitSphereTerminationQueue,
+} from "@orbitsphere/queues";
 /// Local imports
 import { environment } from "./environments";
 
@@ -11,6 +15,14 @@ export const orbitsphere = new OrbitSphere(
 );
 
 /// Handlers
-export const orbitSphereEventsHandler = new OrbitSphereEventsHandler(
-  OrbitSphereEventsHandler.databaseUrl
+export const orbitSphereDatabase = new OrbitSphereDatabase(
+  OrbitSphereDatabase.databaseUrl
+);
+
+/// Queues
+export const orbitsphereRentalQueue = new OrbitSphereRentalQueue();
+export const orbitSphereTerminationQueue = new OrbitSphereTerminationQueue();
+await orbitsphereRentalQueue.initialize(environment.RABBITMQ_CONNETION_URL);
+await orbitSphereTerminationQueue.initialize(
+  environment.RABBITMQ_CONNETION_URL
 );

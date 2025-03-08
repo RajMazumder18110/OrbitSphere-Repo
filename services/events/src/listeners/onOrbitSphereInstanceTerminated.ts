@@ -1,7 +1,7 @@
 /** @notice Library imports */
 import type { CreateTerminationLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
-import { orbitsphere, orbitSphereEventsHandler } from "@/configs/clients";
+import { orbitsphere, orbitSphereDatabase } from "@/configs/clients";
 
 await orbitsphere.onOrbitSphereInstanceTerminated(
   async (tenant, sphereId, actualCost, timeConsumed, refundAmount, payload) => {
@@ -10,7 +10,7 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
 
       /// Recoding `OrbitSphereInstanceTerminated` into database
       const { blockNumber, transactionHash, data, topics } = payload.log;
-      await orbitSphereEventsHandler.recordTerminationLog({
+      await orbitSphereDatabase.events.recordTerminationLog({
         /// Core
         tenant,
         sphereId,

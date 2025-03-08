@@ -1,7 +1,12 @@
 /** @notice Library imports */
+import { toUtf8String } from "@orbitsphere/orbiter";
 import type { CreateRentalLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
-import { orbitsphere, orbitSphereEventsHandler } from "@/configs/clients";
+import {
+  orbitsphere,
+  orbitSphereDatabase,
+  orbitsphereRentalQueue,
+} from "@/configs/clients";
 
 await orbitsphere.onOrbitSphereInstanceRented(
   async (
@@ -17,10 +22,15 @@ await orbitsphere.onOrbitSphereInstanceRented(
   ) => {
     try {
       /// Adding into Rental queue
+      await orbitsphereRentalQueue.publish({
+        region: toUtf8String(region),
+        instanceType: toUtf8String(instanceType),
+        sshPublicKey: toUtf8String(sshPublicKey),
+      });
 
       /// Recoding `OrbitSphereInstanceRented` into database
       const { blockNumber, transactionHash, data, topics } = payload.log;
-      await orbitSphereEventsHandler.recordRentalLog({
+      await orbitSphereDatabase.events.recordRentalLog({
         /// Core
         region,
         sphereId,

@@ -71,6 +71,7 @@
       "dependencies": {
         "@orbitsphere/database": "workspace:*",
         "@orbitsphere/orbiter": "workspace:*",
+        "@orbitsphere/queues": "workspace:*",
       },
       "devDependencies": {
         "@types/bun": "latest",
