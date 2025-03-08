@@ -1,6 +1,7 @@
 /** @notice Library imports */
 import {
   Contract,
+  toUtf8String,
   JsonRpcProvider,
   WebSocketProvider,
   type ContractEventPayload,
@@ -55,4 +56,4 @@ class OrbitSphere {
 }
 
 /** @notice Exports */
-export { OrbitSphere, orbitSphereAbi };
+export { OrbitSphere, orbitSphereAbi, toUtf8String };
