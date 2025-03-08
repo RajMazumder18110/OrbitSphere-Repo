@@ -1,6 +1,6 @@
 /** @notice Library imports */
 /// Local imports
-import { OrbitSphereExchange } from "@/OrbitSphereExchange";
+import { OrbitSphereExchange } from "./OrbitSphereExchange";
 import { Exchanges, ExchangeRoutes, Queues } from "@/constants";
 
 /// Interface
