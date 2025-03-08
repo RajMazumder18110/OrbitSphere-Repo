@@ -1,5 +1,5 @@
 {
-  "name": "@orbitsphere/rental",
+  "name": "@orbitsphere/events",
   "type": "module",
   "main": "src/index.ts",
   "private": true,

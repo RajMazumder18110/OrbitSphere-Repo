@@ -11,7 +11,6 @@ export const orbitsphere = new OrbitSphere(
 );
 
 /// Handlers
-const connectionUrl = `postgres://${environment.POSTGRES_USER}:${environment.POSTGRES_PASSWORD}@${environment.POSTGRES_HOST}:${environment.POSTGRES_PORT}/${environment.POSTGRES_DB}`;
 export const orbitSphereEventsHandler = new OrbitSphereEventsHandler(
-  connectionUrl
+  OrbitSphereEventsHandler.databaseUrl
 );
