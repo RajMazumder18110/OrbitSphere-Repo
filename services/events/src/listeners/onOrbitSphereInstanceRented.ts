@@ -1,5 +1,5 @@
 /** @notice Library imports */
-import { toUtf8String } from "@orbitsphere/orbiter";
+import { fromBytes32 } from "@orbitsphere/orbiter";
 import type { CreateRentalLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
 import {
@@ -21,11 +21,16 @@ await orbitsphere.onOrbitSphereInstanceRented(
     payload
   ) => {
     try {
+      /// Converting into utf8
+      region = fromBytes32(region);
+      sshPublicKey = fromBytes32(sshPublicKey);
+      instanceType = fromBytes32(instanceType);
+
       /// Adding into Rental queue
       await orbitsphereRentalQueue.publish({
-        region: toUtf8String(region),
-        instanceType: toUtf8String(instanceType),
-        sshPublicKey: toUtf8String(sshPublicKey),
+        region,
+        sshPublicKey,
+        instanceType,
       });
 
       /// Recoding `OrbitSphereInstanceRented` into database
