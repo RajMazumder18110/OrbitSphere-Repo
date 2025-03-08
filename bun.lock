@@ -80,6 +80,20 @@
         "typescript": "^5.8.2",
       },
     },
+    "services/provisioner": {
+      "name": "@orbitsphere/provisioner",
+      "dependencies": {
+        "@orbitsphere/aws": "workspace:*",
+        "@orbitsphere/database": "workspace:*",
+        "@orbitsphere/queues": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "typescript": "^5.8.2",
+      },
+    },
   },
   "packages": {
     "@acuminous/bitsyntax": ["@acuminous/bitsyntax@0.1.2", "", { "dependencies": { "buffer-more-ints": "~1.0.0", "debug": "^4.3.4", "safe-buffer": "~5.1.2" } }, "sha512-29lUK80d1muEQqiUsSo+3A0yP6CdspgC95EnKBMi22Xlwt79i/En4Vr67+cXhU+cZjbti3TgGGC5wy1stIywVQ=="],
@@ -243,6 +257,8 @@
     "@orbitsphere/events": ["@orbitsphere/events@workspace:services/events"],
 
     "@orbitsphere/orbiter": ["@orbitsphere/orbiter@workspace:packages/orbiter"],
+
+    "@orbitsphere/provisioner": ["@orbitsphere/provisioner@workspace:services/provisioner"],
 
     "@orbitsphere/queues": ["@orbitsphere/queues@workspace:packages/queues"],
 
