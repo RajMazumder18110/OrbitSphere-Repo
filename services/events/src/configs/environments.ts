@@ -7,7 +7,7 @@ type Environments = {
   POSTGRES_PASSWORD: string;
   ORBIT_SPHERE_CONTRACT: string;
   BLOCKCHAIN_RPC_ENDPOINT: string;
-  RABBITMQ_CONNETION_URL: string;
+  RABBITMQ_CONNECTION_URL: string;
 };
 
 /// Exports

@@ -22,7 +22,7 @@ export const orbitSphereDatabase = new OrbitSphereDatabase(
 /// Queues
 export const orbitsphereRentalQueue = new OrbitSphereRentalQueue();
 export const orbitSphereTerminationQueue = new OrbitSphereTerminationQueue();
-await orbitsphereRentalQueue.initialize(environment.RABBITMQ_CONNETION_URL);
+await orbitsphereRentalQueue.initialize(environment.RABBITMQ_CONNECTION_URL);
 await orbitSphereTerminationQueue.initialize(
-  environment.RABBITMQ_CONNETION_URL
+  environment.RABBITMQ_CONNECTION_URL
 );
