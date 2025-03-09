@@ -1,12 +1,22 @@
 /** @notice Library imports */
 import type { CreateTerminationLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
-import { orbitsphere, orbitSphereDatabase } from "@/configs/clients";
+import {
+  orbitsphere,
+  orbitSphereDatabase,
+  orbitSphereTerminationQueue,
+} from "@/configs/clients";
 
 await orbitsphere.onOrbitSphereInstanceTerminated(
   async (tenant, sphereId, actualCost, timeConsumed, refundAmount, payload) => {
     try {
       /// Adding into Termination queue
+      const instance =
+        await orbitSphereDatabase.instances.getInstanceBySphereId(sphereId);
+      await orbitSphereTerminationQueue.publish({
+        region: instance?.region!,
+        instanceId: instance?.instanceId!,
+      });
 
       /// Recoding `OrbitSphereInstanceTerminated` into database
       const { blockNumber, transactionHash, data, topics } = payload.log;
