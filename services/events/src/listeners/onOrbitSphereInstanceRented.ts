@@ -31,6 +31,7 @@ await orbitsphere.onOrbitSphereInstanceRented(
         region,
         sshPublicKey,
         instanceType,
+        sphereId: sphereId.toString(),
       });
 
       /// Recoding `OrbitSphereInstanceRented` into database
