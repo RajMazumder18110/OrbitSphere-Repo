@@ -50,8 +50,6 @@ class OrbitSphereAWSInstance {
 
   public async launch(data: LaunchInstanceParams): Promise<Instance> {
     return new Promise((resolve, reject) => {
-      console.log(data);
-
       /// Initializing instance
       const client = new EC2Client({
         region: data.region,
@@ -83,7 +81,6 @@ class OrbitSphereAWSInstance {
           return this.wait(client, instanceId);
         })
         .then((instance) => {
-          console.log(`Deployed ip`, instance.PublicIpAddress);
           resolve(instance);
         })
         .catch((err) => reject(err));
