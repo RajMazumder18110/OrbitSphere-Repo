@@ -8,11 +8,12 @@ import {
   type CreateRentalLogParams,
   type CreateTerminationLogParams,
 } from "@/schemas";
-import OrbitSphereBase from "./OrbitSphereBase";
+import type { DBType } from "./OrbitSphereBase";
 
-export class OrbitSphereEventsHandler extends OrbitSphereBase {
+export class OrbitSphereEventsHandler {
+  constructor(private connection: DBType) {}
   public recordRentalLog(data: CreateRentalLogParams) {
-    return this.orbitSphereDatabase.transaction(async (tx) => {
+    return this.connection.transaction(async (tx) => {
       /// Create tenant first if doesn't present
       await tx
         .insert(tenantsTable)
@@ -27,20 +28,20 @@ export class OrbitSphereEventsHandler extends OrbitSphereBase {
   }
 
   public getLastestRentalLog() {
-    return this.orbitSphereDatabase.query.rentalLogsTable.findFirst({
+    return this.connection.query.rentalLogsTable.findFirst({
       orderBy: desc(rentalLogsTable.blockNumber),
     });
   }
 
   public recordTerminationLog(data: CreateTerminationLogParams) {
-    return this.orbitSphereDatabase.insert(terminateLogsTable).values({
+    return this.connection.insert(terminateLogsTable).values({
       ...data,
       tenant: data.tenant.toLowerCase(),
     });
   }
 
   public getLastestTerminationLog() {
-    return this.orbitSphereDatabase.query.terminateLogsTable.findFirst({
+    return this.connection.query.terminateLogsTable.findFirst({
       orderBy: desc(terminateLogsTable.blockNumber),
     });
   }
