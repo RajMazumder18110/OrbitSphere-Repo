@@ -19,5 +19,5 @@ export const orbitsphereAWS = new OrbitSphereAWSInstance(
 /// Queues
 export const orbitSphereTerminationQueue = new OrbitSphereTerminationQueue();
 await orbitSphereTerminationQueue.initialize(
-  environment.RABBITMQ_CONNETION_URL
+  environment.RABBITMQ_CONNECTION_URL
 );

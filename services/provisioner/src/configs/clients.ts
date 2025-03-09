@@ -18,4 +18,4 @@ export const orbitsphereAWS = new OrbitSphereAWSInstance(
 
 /// Queues
 export const orbitsphereRentalQueue = new OrbitSphereRentalQueue();
-await orbitsphereRentalQueue.initialize(environment.RABBITMQ_CONNETION_URL);
+await orbitsphereRentalQueue.initialize(environment.RABBITMQ_CONNECTION_URL);
