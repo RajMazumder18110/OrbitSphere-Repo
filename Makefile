@@ -13,13 +13,10 @@ terminate:
 dev:
 	@bunx dotenv -e .env -- bun run --filter "*" dev 
 
-dev-rental:
-	@bun run --filter "@orbitsphere/rental" dev
-
 # Docker builds
 build:
-	@echo "Builing micro services..."
 	@bun run --filter "*" build
 
-	@echo "Builing docker images..."
-	@docker build -t raj18110mazumder/orbitsphere-rental-service:latest -f services/rental/Dockerfile services/rental
+	@docker build -t raj18110mazumder/orbitsphere-events -f services/events/Dockerfile services/events
+	@docker build -t raj18110mazumder/orbitsphere-provisioner -f services/provisioner/Dockerfile services/provisioner
+	@docker build -t raj18110mazumder/orbitsphere-terminator -f services/terminator/Dockerfile services/terminator

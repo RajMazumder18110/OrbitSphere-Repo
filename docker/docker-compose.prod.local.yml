@@ -1,0 +1,19 @@
+services:
+  events:
+    image: raj18110mazumder/orbitsphere-events:latest
+    env_file: ../.env
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+      - RABBITMQ_CONNECTION_URL=amqp://host.docker.internal
+  provisioner:
+    image: raj18110mazumder/orbitsphere-provisioner:latest
+    env_file: ../.env
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+      - RABBITMQ_CONNECTION_URL=amqp://host.docker.internal
+  terminator:
+    image: raj18110mazumder/orbitsphere-terminator:latest
+    env_file: ../.env
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+      - RABBITMQ_CONNECTION_URL=amqp://host.docker.internal
