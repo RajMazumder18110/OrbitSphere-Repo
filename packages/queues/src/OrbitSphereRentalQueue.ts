@@ -6,6 +6,7 @@ import { Exchanges, ExchangeRoutes, Queues } from "@/constants";
 /// Interface
 type RentalPayload = {
   region: string;
+  tenant: string;
   sphereId: string;
   instanceType: string;
   sshPublicKey: string;

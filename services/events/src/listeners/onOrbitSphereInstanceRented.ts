@@ -29,6 +29,7 @@ await orbitsphere.onOrbitSphereInstanceRented(
       /// Adding into Rental queue
       await orbitsphereRentalQueue.publish({
         region,
+        tenant,
         sshPublicKey,
         instanceType,
         sphereId: sphereId.toString(),
