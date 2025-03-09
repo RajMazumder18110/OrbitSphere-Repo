@@ -2,7 +2,11 @@
 import { eq } from "drizzle-orm";
 /// Local imports
 import type { DBType } from "./OrbitSphereBase";
-import { instancesTable, type CreateInstanceParams } from "@/schemas";
+import {
+  instancesTable,
+  InstanceStatus,
+  type CreateInstanceParams,
+} from "@/schemas";
 
 export class OrbitSphereInstanceHandler {
   constructor(private connection: DBType) {}
@@ -24,5 +28,14 @@ export class OrbitSphereInstanceHandler {
       ...data,
       tenant: data.tenant.toLocaleLowerCase(),
     });
+  }
+
+  public async terminate(instanceId: string) {
+    return this.connection
+      .update(instancesTable)
+      .set({
+        status: InstanceStatus.TERMINATED,
+      })
+      .where(eq(instancesTable.instanceId, instanceId));
   }
 }
