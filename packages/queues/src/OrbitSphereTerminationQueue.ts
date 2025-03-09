@@ -6,7 +6,7 @@ import { Exchanges, ExchangeRoutes, Queues } from "@/constants";
 /// Interface
 type TerminatePayload = {
   region: string;
-  instanceType: string;
+  instanceId: string;
 };
 
 export class OrbitSphereTerminationQueue extends OrbitSphereExchange {
