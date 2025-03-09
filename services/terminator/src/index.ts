@@ -7,8 +7,8 @@ import {
 } from "@/configs/clients";
 
 await orbitSphereTerminationQueue.consume(async (payload) => {
-  /// Creating AWS instance
-  const instance = await orbitsphereAWS.terminate(payload);
+  /// Terminating AWS instance
+  const response = await orbitsphereAWS.terminate(payload);
   // const { PublicIpAddress, PrivateIpAddress, InstanceId } = instance;
   /// Saving instance details into database
   await orbitSphereDatabase.instances.terminate(payload.instanceId);
