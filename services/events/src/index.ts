@@ -1,5 +1,6 @@
 /** @notice Local imports */
+import { logger } from "@/configs/clients";
 import "@/listeners/onOrbitSphereInstanceRented";
 import "@/listeners/onOrbitSphereInstanceTerminated";
 
-console.log("Listening...");
+logger.info("Started listening OrbitSphere contract events");

@@ -17,6 +17,7 @@
   "dependencies": {
     "@orbitsphere/database": "workspace:*",
     "@orbitsphere/orbiter": "workspace:*",
-    "@orbitsphere/queues": "workspace:*"
+    "@orbitsphere/queues": "workspace:*",
+    "@orbitsphere/logger": "workspace:*"
   }
 }

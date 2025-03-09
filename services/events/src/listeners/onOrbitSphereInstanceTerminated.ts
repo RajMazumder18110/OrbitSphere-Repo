@@ -2,6 +2,7 @@
 import type { CreateTerminationLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
 import {
+  logger,
   orbitsphere,
   orbitSphereDatabase,
   orbitSphereTerminationQueue,
@@ -13,9 +14,20 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
       /// Adding into Termination queue
       const instance =
         await orbitSphereDatabase.instances.getInstanceBySphereId(sphereId);
+
+      logger.info("Requested for termination", {
+        tenant,
+        sphereId: sphereId.toString(),
+        instanceId: instance?.instanceId,
+      });
+
       await orbitSphereTerminationQueue.publish({
         region: instance?.region!,
         instanceId: instance?.instanceId!,
+      });
+
+      logger.info("Queued termination request", {
+        sphereId: sphereId.toString(),
       });
 
       /// Recoding `OrbitSphereInstanceTerminated` into database
@@ -34,7 +46,11 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
         blockNumber: BigInt(blockNumber),
       } satisfies CreateTerminationLogParams);
 
-      console.log(`Terminating sphere id ${sphereId.toString()}...`);
+      logger.info(`Terminating sphereId ${sphereId.toString()}`, {
+        tenant,
+        sphereId: sphereId.toString(),
+        instanceId: instance?.instanceId,
+      });
     } catch (error) {
       console.error(error);
     }

@@ -1,5 +1,6 @@
 /** @notice Library imports */
 import { OrbitSphere } from "@orbitsphere/orbiter";
+import { createOrbitSphereLogger } from "@orbitsphere/logger";
 import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 import {
   OrbitSphereRentalQueue,
@@ -7,6 +8,9 @@ import {
 } from "@orbitsphere/queues";
 /// Local imports
 import { environment } from "./environments";
+
+/// Logger
+export const logger = createOrbitSphereLogger("events");
 
 /// OrbitSphere contract
 export const orbitsphere = new OrbitSphere(

@@ -3,6 +3,7 @@ import { fromBytes32 } from "@orbitsphere/orbiter";
 import type { CreateRentalLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
 import {
+  logger,
   orbitsphere,
   orbitSphereDatabase,
   orbitsphereRentalQueue,
@@ -26,12 +27,23 @@ await orbitsphere.onOrbitSphereInstanceRented(
       sshPublicKey = fromBytes32(sshPublicKey);
       instanceType = fromBytes32(instanceType);
 
+      logger.info("Requested for instance", {
+        tenant,
+        region,
+        instanceType,
+        sphereId: sphereId.toString(),
+      });
+
       /// Adding into Rental queue
       await orbitsphereRentalQueue.publish({
         region,
         tenant,
         sshPublicKey,
         instanceType,
+        sphereId: sphereId.toString(),
+      });
+
+      logger.info("Queued rental request", {
         sphereId: sphereId.toString(),
       });
 
@@ -54,7 +66,12 @@ await orbitsphere.onOrbitSphereInstanceRented(
         blockNumber: BigInt(blockNumber),
       } satisfies CreateRentalLogParams);
 
-      console.log(`Processing sphere id ${sphereId.toString()}...`);
+      logger.info(`Initializing sphereId ${sphereId.toString()}`, {
+        tenant,
+        region,
+        instanceType,
+        sphereId: sphereId.toString(),
+      });
     } catch (error) {
       console.log(error);
     }
