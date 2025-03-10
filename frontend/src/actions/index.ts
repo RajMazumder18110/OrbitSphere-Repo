@@ -1,4 +1,15 @@
+"use server";
+import { toHex } from "viem";
+
 /// Types
+export type Instance = {
+  id: string;
+  instanceId: string;
+  region: string;
+  instanceType: string;
+  status: "RUNNING" | "TERMINATED";
+};
+
 export interface IRegion {
   name: string;
   value: string;
@@ -14,6 +25,33 @@ export interface ISphere {
   sGiB: number;
   isEnabled: boolean;
 }
+
+export const getInstancesBy = async (type: string): Promise<Instance[]> =>
+  new Promise((resolve) => {
+    const runningInstances = Array.from({ length: 9 }).map((_, i) => ({
+      id: i.toString(),
+      instanceId: "i-0b22a22eec53b9321",
+      region: "Mumbai",
+      instanceType: "t2.micro",
+      status: "RUNNING",
+    }));
+
+    const terminatedInstances = Array.from({ length: 7 }).map((_, i) => ({
+      id: i.toString(),
+      instanceId: "i-0b22a22eec53b9321",
+      region: "Mumbai",
+      instanceType: "t2.micro",
+      status: "TERMINATED",
+    }));
+
+    const instances = runningInstances.concat(terminatedInstances);
+
+    resolve(
+      instances.filter(
+        (i) => i.status === (type ?? "running").toUpperCase()
+      ) as Instance[]
+    );
+  });
 
 // Actions
 export const getAllActiveRegions = async (): Promise<IRegion[]> =>
