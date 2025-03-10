@@ -36,9 +36,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} hide-scrollbar antialiased min-h-screen w-screen`}
       >
         <div className="max-w-5xl w-[90%] m-auto flex flex-col gap-5">
-          <Navbar />
           {children}
-          <Footer />
           <Toaster theme="dark" />
         </div>
       </body>
