@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 /// Local imports
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const geistSans = Geist({
@@ -37,6 +36,8 @@ export default function RootLayout({
       >
         <div className="max-w-5xl w-[90%] m-auto flex flex-col gap-5">
           {children}
+
+          <Footer />
           <Toaster theme="dark" />
         </div>
       </body>

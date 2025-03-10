@@ -16,7 +16,6 @@ import { IoMdGlobe } from "react-icons/io";
 import { getAllActiveSpheres } from "@/actions";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export default async function Home() {
   const instances = await getAllActiveSpheres();
@@ -177,7 +176,6 @@ export default async function Home() {
           </Link>
         </section>
       </div>
-      <Footer />
     </>
   );
 }
