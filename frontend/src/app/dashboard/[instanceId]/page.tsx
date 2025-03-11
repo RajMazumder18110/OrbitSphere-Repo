@@ -40,6 +40,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CopyButton from "@/components/CopyButton";
+import Terminate from "./Terminate";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -110,15 +111,18 @@ const SingleInstanceDetails = async ({
               />
             </div>
             {!isTerminated && (
-              <DialogTrigger asChild>
-                <Button
-                  variant="secondary"
-                  type="button"
-                  className="cursor-pointer"
-                >
-                  Connect
-                </Button>
-              </DialogTrigger>
+              <div className="flex items-center gap-4">
+                <DialogTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    className="cursor-pointer"
+                  >
+                    Connect
+                  </Button>
+                </DialogTrigger>
+                <Terminate sphereId={instance.id} />
+              </div>
             )}
           </header>
 
