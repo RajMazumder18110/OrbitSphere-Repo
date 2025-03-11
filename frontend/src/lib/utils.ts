@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const getDegree = (actualValue: number, totalValue: number) => {
+  return (actualValue / totalValue) * 360;
+};
+
 export const minifyAddress = (address?: string) =>
   address?.replace(address.substring(10, 32), "...");
 

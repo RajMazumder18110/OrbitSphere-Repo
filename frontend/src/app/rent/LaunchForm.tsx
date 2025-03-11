@@ -46,6 +46,7 @@ import { minifyAddress } from "@/lib/utils";
 import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORBITSPHERE, USDC } from "@/constants";
+import Link from "next/link";
 
 /// Type
 type ILaunchInstanceFormProps = {
@@ -471,16 +472,18 @@ const LaunchInstanceForm = ({
             )}
 
             {isTxnSuccess && (
-              <Button
-                type="button"
-                variant="secondary"
-                className="cursor-pointer"
-                onClick={() => setIsDialogOpen(() => false)}
-              >
-                {BigInt(usdcBalanceOfUser ?? 0) < BigInt(rentalCost ?? 0)
-                  ? "Cancel"
-                  : "Let's go"}
-              </Button>
+              <Link href={"/dashboard"}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="cursor-pointer"
+                  onClick={() => setIsDialogOpen(() => false)}
+                >
+                  {BigInt(usdcBalanceOfUser ?? 0) < BigInt(rentalCost ?? 0)
+                    ? "Cancel"
+                    : "Let's go"}
+                </Button>
+              </Link>
             )}
           </section>
         </DialogContent>

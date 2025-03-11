@@ -4,10 +4,8 @@ import {
   flexRender,
   useReactTable,
   getCoreRowModel,
-  RowSelectionState,
 } from "@tanstack/react-table";
 import Link from "next/link";
-import { Dispatch, SetStateAction } from "react";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 /// Local imports
 import {
@@ -18,56 +16,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { capitalize } from "@/lib/utils";
-
-type Instance = {
-  id: string;
-  instanceId: string;
-  region: string;
-  instanceType: string;
-  status: "RUNNING" | "TERMINATED";
-};
+import { Instance } from "@/actions";
 
 /// Props
 interface InstancesTableProps {
   data: Instance[];
   isTerminated: boolean;
-  rowSelection: RowSelectionState;
-  setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
 }
 
 export function InstancesTable({
   // columns,
   data,
   isTerminated,
-  rowSelection,
-  setRowSelection,
 }: InstancesTableProps) {
   const columns: ColumnDef<Instance>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          className={isTerminated ? "hidden" : ""}
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          className={isTerminated ? "hidden" : ""}
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-    },
     {
       accessorKey: "status",
       header: "Status",
@@ -113,10 +77,6 @@ export function InstancesTable({
     columns,
     getRowId: (row) => row.id,
     getCoreRowModel: getCoreRowModel(),
-    onRowSelectionChange: setRowSelection,
-    state: {
-      rowSelection,
-    },
   });
 
   return (
@@ -163,13 +123,6 @@ export function InstancesTable({
           )}
         </TableBody>
       </Table>
-
-      {!isTerminated && (
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} sphere(s) selected.
-        </div>
-      )}
     </div>
   );
 }

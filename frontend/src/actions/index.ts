@@ -26,11 +26,41 @@ export interface ISphere {
   isEnabled: boolean;
 }
 
+export interface UtilizationData {
+  time: string;
+  percentCpu: number;
+  percentMem: number;
+}
+
+export const getUtilizationData = async (): Promise<UtilizationData[]> =>
+  new Promise((resolve) =>
+    resolve([
+      { time: "10:00", percentCpu: 10, percentMem: 10 },
+      { time: "10:05", percentCpu: 35, percentMem: 10 },
+      { time: "10:10", percentCpu: 37, percentMem: 10 },
+      { time: "10:15", percentCpu: 73, percentMem: 10 },
+      { time: "10:20", percentCpu: 65, percentMem: 10 },
+      { time: "10:25", percentCpu: 73, percentMem: 10 },
+      { time: "10:30", percentCpu: 73, percentMem: 10 },
+    ])
+  );
+
+export const getInstancesById = async (id: string): Promise<Instance> =>
+  new Promise((resolve) =>
+    resolve({
+      id: "1",
+      instanceId: id,
+      region: "Mumbai",
+      instanceType: "t2.micro",
+      status: "TERMINATED",
+    })
+  );
+
 export const getInstancesBy = async (type: string): Promise<Instance[]> =>
   new Promise((resolve) => {
     const runningInstances = Array.from({ length: 9 }).map((_, i) => ({
       id: i.toString(),
-      instanceId: "i-0b22a22eec53b9321",
+      instanceId: "i-0b22a22eec53b9321" + i,
       region: "Mumbai",
       instanceType: "t2.micro",
       status: "RUNNING",

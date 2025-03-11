@@ -11,14 +11,12 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { getInstancesBy, Instance } from "@/actions";
-import { Button } from "@/components/ui/button";
 import { InstancesTable } from "./InstancesTable";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 const DashboardPage = () => {
   const router = useRouter();
   const params = useSearchParams();
-  const [rowSelection, setRowSelection] = useState({});
   const [instances, setInstances] = useState<Instance[]>([]);
 
   const currentTab = params.get("tab")!;
@@ -66,23 +64,11 @@ const DashboardPage = () => {
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-
-        {currentTab !== "terminated" && (
-          <Button
-            className="cursor-pointer"
-            variant="secondary"
-            disabled={!Boolean(Object.keys(rowSelection).length)}
-          >
-            Terminate
-          </Button>
-        )}
       </div>
 
       <section className="w-full min-h-[55.5vh]">
         <InstancesTable
           data={instances}
-          rowSelection={rowSelection}
-          setRowSelection={setRowSelection}
           isTerminated={currentTab === "terminated"}
         />
       </section>
