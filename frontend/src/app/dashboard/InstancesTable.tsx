@@ -40,7 +40,7 @@ export function InstancesTable({
           <MdOutlineRadioButtonChecked
             className={`${
               isTerminated ? "text-red-500" : "text-green-500"
-            } text-sm`}
+            } text-sm animate-pulse`}
           />
           <h1 className="">{capitalize(cell.getValue() as string)}</h1>
         </div>

@@ -106,7 +106,7 @@ const SingleInstanceDetails = async ({
               <MdOutlineRadioButtonChecked
                 className={`${
                   isTerminated ? "text-red-500" : "text-green-500"
-                } text-lg`}
+                } text-xl animate-pulse`}
               />
             </div>
             {!isTerminated && (
