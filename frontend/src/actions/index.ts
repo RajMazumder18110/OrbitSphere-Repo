@@ -112,6 +112,57 @@ const fakeInstances: Instance[] = [
       isEnabled: false,
     },
   },
+  {
+    id: "4",
+    instanceId: "i-0wxyz6789abcd1235",
+    region: {
+      name: "US (California)",
+      value: "us-west-1",
+      isEnabled: true,
+    },
+    instanceType: "t2.micro",
+    publicIp: "13.186.74.12",
+    privateIp: "10.1.1.27",
+    status: "RUNNING",
+    rentedOn: new Date("2025-03-09T08:30:00Z"),
+    totalCost: 21.6,
+    willBeEndOn: new Date("2025-04-09T08:30:00Z"),
+    sphere: {
+      name: "t2.small",
+      hourlyRate: 0.03, // 0.03 USDT
+      noOfCPUs: 1,
+      noOfGPUs: 0,
+      memoryGBs: 2,
+      sGiB: 8,
+      isEnabled: false,
+    },
+  },
+
+  {
+    id: "5",
+    instanceId: "i-0wxyz6789abcd1245",
+    region: {
+      name: "Asia (Mumbai)",
+      value: "ap-south-1",
+      isEnabled: true,
+    },
+    instanceType: "t2.micro",
+    publicIp: "13.186.74.12",
+    privateIp: "10.1.1.27",
+    status: "TERMINATED",
+    rentedOn: new Date("2025-03-01T08:30:00Z"),
+    totalCost: 4.8,
+    willBeEndOn: new Date("2025-03-10T08:30:00Z"),
+    sphere: {
+      name: "t2.micro",
+      hourlyRate: 0.02, // 0.02 USDT
+      noOfCPUs: 1,
+      noOfGPUs: 0,
+      memoryGBs: 1,
+      sGiB: 8,
+      isEnabled: true,
+    },
+  },
 ];
 
 export const getUtilizationData = async (): Promise<UtilizationData[]> =>
