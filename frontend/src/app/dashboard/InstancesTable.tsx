@@ -51,7 +51,7 @@ export function InstancesTable({
       header: "Instance ID",
       cell: ({ cell }) => (
         <Link href={`/dashboard/${cell.getValue() as string}`}>
-          <Button className="cursor-pointer h-7" variant="link">
+          <Button className="cursor-pointer h-7 font-medium" variant="link">
             {cell.getValue() as string}
           </Button>
         </Link>
@@ -65,6 +65,9 @@ export function InstancesTable({
     {
       accessorKey: "region",
       header: "Region",
+      cell: ({ cell }) => (
+        <h1>{(cell.getValue() as Instance["region"]).name}</h1>
+      ),
     },
     {
       accessorKey: "instanceType",

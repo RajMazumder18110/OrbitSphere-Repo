@@ -4,7 +4,7 @@ import { TbClockPlay } from "react-icons/tb";
 import { BsFillCpuFill } from "react-icons/bs";
 import { IoLogoUsd, IoMdGlobe } from "react-icons/io";
 import { FaLocationCrosshairs } from "react-icons/fa6";
-import { LuCalendarClock, LuServer } from "react-icons/lu";
+import { LuCalendarClock, LuServer, LuServerOff } from "react-icons/lu";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 /// Local imports
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -18,8 +18,15 @@ import {
 } from "@/components/ui/card";
 import RadialChart from "./RefundChart";
 import UtilizationChart from "./UtilizationChart";
-import { capitalize, getDegree } from "@/lib/utils";
+import {
+  capitalize,
+  getCompletionPercentage,
+  getDegree,
+  getTimeRemaining,
+} from "@/lib/utils";
 import { getInstancesById, getUtilizationData } from "@/actions";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -32,14 +39,45 @@ const SingleInstanceDetails = async ({
   params,
 }: SingleInstanceDetailsProps) => {
   const { instanceId } = await params;
-
-  const timeConsumed = 10; // 10%
-  const refundAmount = 30.5; // USDC
-  const totalPaid = 80.5;
-  const endTime = new Date();
-
+  /// Grabbing data from database
   const instance = await getInstancesById(instanceId);
+
+  /** @notice Incase if instance not found with id */
+  if (!instance) {
+    return (
+      <div className="w-full flex flex-col gap-10 font-[family-name:var(--font-geist-mono)]">
+        <div className="flex gap-7">
+          <Breadcrumbs />
+        </div>
+        <div className="h-[75vh] flex flex-col items-center justify-center gap-5">
+          <LuServerOff className="text-5xl" />
+          <div className="flex flex-col gap-2 items-center justify-center">
+            <h1 className="text-xl font-semibold text-muted-foreground">
+              No instance found
+            </h1>
+            <h1 className="text-3xl font-semibold">{instanceId}</h1>
+          </div>
+          <Link href={"/dashboard"}>
+            <Button
+              className="dark text-lg cursor-pointer underline underline-offset-4"
+              variant="link"
+            >
+              Back
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  /// Calculating data
   const isTerminated = instance.status === "TERMINATED";
+  const completedPercentage = getCompletionPercentage(
+    instance.rentedOn,
+    instance.willBeEndOn
+  );
+
+  const refundAmount = 1.5; // USDC
 
   const utilizationData = await getUtilizationData();
 
@@ -61,13 +99,13 @@ const SingleInstanceDetails = async ({
         <section className="w-full flex flex-col gap-5">
           <div className="flex items-center gap-3">
             <LuCalendarClock className="text-2xl" />
-            <h1>{endTime.toTimeString()}</h1>
+            <h1>{instance.willBeEndOn.toString()}</h1>
           </div>
           <div className="flex items-center gap-3">
             <Badge className="text-xs font-semibold dark rounded-full">
-              {timeConsumed}%
+              {completedPercentage}%
             </Badge>
-            <Progress value={timeConsumed} className="w-full h-4 dark" />
+            <Progress value={completedPercentage} className="w-full h-4 dark" />
           </div>
         </section>
       </div>
@@ -87,7 +125,9 @@ const SingleInstanceDetails = async ({
             <IoLogoUsd className="text-2xl" />
             <div className="flex flex-col gap-1 items-center">
               <CardTitle>Consumed</CardTitle>
-              <CardDescription>{totalPaid - refundAmount} USDC</CardDescription>
+              <CardDescription>
+                {instance.totalCost - refundAmount} USDC
+              </CardDescription>
             </div>
           </CardHeader>
         </Card>
@@ -96,7 +136,9 @@ const SingleInstanceDetails = async ({
             <TbClockPlay className="text-2xl" />
             <div className="flex flex-col gap-1 items-center">
               <CardTitle>Remaining</CardTitle>
-              <CardDescription>00:15:00</CardDescription>
+              <CardDescription>
+                {getTimeRemaining(instance.willBeEndOn)}
+              </CardDescription>
             </div>
           </CardHeader>
         </Card>
@@ -105,7 +147,9 @@ const SingleInstanceDetails = async ({
             <FaLocationCrosshairs className="text-2xl" />
             <div className="flex flex-col gap-1 items-center">
               <CardTitle>Region</CardTitle>
-              <CardDescription>{capitalize(instance.region)}</CardDescription>
+              <CardDescription>
+                {capitalize(instance.region.name)}
+              </CardDescription>
             </div>
           </CardHeader>
         </Card>
@@ -132,7 +176,7 @@ const SingleInstanceDetails = async ({
             <BsFillCpuFill className="text-2xl" />
             <div className="flex flex-col gap-1 items-center">
               <CardTitle>vCPUs</CardTitle>
-              <CardDescription>1</CardDescription>
+              <CardDescription>{instance.sphere.noOfCPUs}</CardDescription>
             </div>
           </CardHeader>
         </Card>
@@ -141,7 +185,7 @@ const SingleInstanceDetails = async ({
             <FaMemory className="text-2xl" />
             <div className="flex flex-col gap-1 items-center">
               <CardTitle>Memory</CardTitle>
-              <CardDescription>1 GiB</CardDescription>
+              <CardDescription>{instance.sphere.memoryGBs} GiB</CardDescription>
             </div>
           </CardHeader>
         </Card>
@@ -150,7 +194,7 @@ const SingleInstanceDetails = async ({
       <section className="dark grid grid-cols-1 sm:grid-cols-3 gap-5 text-center">
         <RadialChart
           value={refundAmount}
-          circleFillDeg={getDegree(refundAmount, totalPaid)}
+          circleFillDeg={getDegree(refundAmount, instance.totalCost)}
         />
         <UtilizationChart data={utilizationData} />
       </section>

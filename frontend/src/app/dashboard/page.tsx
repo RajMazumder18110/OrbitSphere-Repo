@@ -66,7 +66,7 @@ const DashboardPage = () => {
         </NavigationMenu>
       </div>
 
-      <section className="w-full min-h-[55.5vh]">
+      <section className="w-full h-[67.5vh]">
         <InstancesTable
           data={instances}
           isTerminated={currentTab === "terminated"}
