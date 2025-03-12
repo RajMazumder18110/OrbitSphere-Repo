@@ -41,6 +41,8 @@ import {
 } from "@/components/ui/dialog";
 import CopyButton from "@/components/CopyButton";
 import Terminate from "./Terminate";
+import ServerNotFoundImage from "@/assets/not-found.svg";
+import Image from "next/image";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -63,13 +65,17 @@ const SingleInstanceDetails = async ({
         <div className="flex gap-7">
           <Breadcrumbs />
         </div>
-        <div className="h-[75vh] flex flex-col items-center justify-center gap-5">
-          <LuServerOff className="text-5xl" />
+        <div className="min-h-[50vh] flex flex-col items-center justify-center gap-10">
+          <Image
+            src={ServerNotFoundImage}
+            alt="Server not found"
+            className="w-[35%]"
+          />
           <div className="flex flex-col gap-2 items-center justify-center">
             <h1 className="text-xl font-semibold text-muted-foreground">
-              No instance found
+              Not found
             </h1>
-            <h1 className="text-3xl font-semibold">{instanceId}</h1>
+            <h1 className="text-xl md:text-3xl font-semibold">{instanceId}</h1>
           </div>
           <Link href={"/dashboard"}>
             <Button
