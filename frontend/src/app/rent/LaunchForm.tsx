@@ -1,18 +1,17 @@
 /** @notice Library imports */
 "use client";
+import Link from "next/link";
 import { toast } from "sonner";
 import { erc20Abi, formatUnits, Hex } from "viem";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { FaCheck, FaRegClock } from "react-icons/fa6";
 import { TbServer2 } from "react-icons/tb";
 import { RiLoader4Line } from "react-icons/ri";
-import { IoRocketSharp } from "react-icons/io5";
-import { MdOutlineWallet, MdError } from "react-icons/md";
+import { MdError } from "react-icons/md";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
-import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import {
   useAccount,
   usePublicClient,
@@ -46,7 +45,6 @@ import { minifyAddress } from "@/lib/utils";
 import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORBITSPHERE, USDC } from "@/constants";
-import Link from "next/link";
 import { NormalConnectButton } from "@/components/ConnectButton";
 
 /// Type
@@ -70,7 +68,6 @@ const LaunchInstanceForm = ({
     resolver: zodResolver(launchInstanceSchema),
   });
   const [rentalCost, setRentalCost] = useState("");
-  const formRef = useRef<HTMLFormElement>(null);
   const [isTxnSuccess, setIsTxnSuccess] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentTransactionStatus, setCurrentTransactionStatus] = useState("");
@@ -84,12 +81,6 @@ const LaunchInstanceForm = ({
     functionName: "balanceOf",
     args: [address!],
   });
-
-  useEffect(() => {
-    if (isConnected) {
-      formRef?.current?.requestSubmit();
-    }
-  }, [address]);
 
   const onSubmit = async (params: LaunchInstanceSchema) => {
     try {
@@ -178,7 +169,6 @@ const LaunchInstanceForm = ({
   return (
     <Dialog open={isDialogOpen}>
       <form
-        ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
         className="w-full flex flex-col gap-10 items-center"
       >
@@ -389,12 +379,7 @@ const LaunchInstanceForm = ({
               />
             </div>
             <DialogTrigger asChild>
-              <NormalConnectButton
-                className="self-end"
-                disabled={isDialogOpen}
-                onConnectType={"submit"}
-                text={isDialogOpen ? "Launching" : "Launch"}
-              ></NormalConnectButton>
+              {!isConnected && <NormalConnectButton className="self-end" />}
             </DialogTrigger>
           </section>
         </div>

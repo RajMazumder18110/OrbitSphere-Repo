@@ -2,7 +2,6 @@
 /** @notice Local imports */
 import { cookies } from "next/headers";
 import { sign, verify } from "jsonwebtoken";
-import { redirect, RedirectType } from "next/navigation";
 
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 
@@ -20,7 +19,6 @@ export const setCookieOnAuth = async (payload: {
 export const removeAuthCookie = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("orbitsphere");
-  redirect("/dashboard", RedirectType.replace);
 };
 
 export const getIsAuthenticated = async () => {

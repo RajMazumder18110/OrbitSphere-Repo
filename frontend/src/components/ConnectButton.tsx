@@ -46,19 +46,7 @@ export const TrustWalletConnectButton = () => {
   );
 };
 
-export const NormalConnectButton = ({
-  icon,
-  text,
-  disabled,
-  onConnectType,
-  className,
-}: {
-  icon?: ReactNode;
-  className?: string;
-  disabled?: boolean;
-  text?: string;
-  onConnectType?: HTMLButtonElement["type"];
-}) => {
+export const NormalConnectButton = ({ className }: { className?: string }) => {
   const { isConnecting } = useAccount();
 
   return (
@@ -82,9 +70,9 @@ export const NormalConnectButton = ({
         return (
           <Button
             className={`cursor-pointer ${className}`}
-            type={!connected ? "button" : onConnectType ?? "button"}
-            onClick={!connected ? openConnectModal : undefined}
-            disabled={disabled ?? (isConnecting || connectModalOpen || !ready)}
+            type={"button"}
+            onClick={!connected ? openConnectModal : openAccountModal}
+            disabled={false}
           >
             {isConnecting || connectModalOpen ? (
               <RiLoader4Line className="animate-spin" />
@@ -95,7 +83,7 @@ export const NormalConnectButton = ({
             {connectModalOpen || isConnecting
               ? "Connecting"
               : connected
-              ? text ?? "Account"
+              ? "Account"
               : "Connect Wallet"}
           </Button>
         );
