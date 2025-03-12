@@ -1,4 +1,5 @@
 /** @notice Library imports */
+import type { TerminateInstanceParams } from "@orbitsphere/database/schemas";
 /// local imports
 import {
   logger,
@@ -14,9 +15,16 @@ await orbitSphereTerminationQueue.consume(async (payload) => {
   logger.info("Instance terminated", {
     instanceId: payload.instanceId,
   });
-  // const { PublicIpAddress, PrivateIpAddress, InstanceId } = instance;
+
   /// Saving instance details into database
-  await orbitSphereDatabase.instances.terminate(payload.instanceId);
+  await orbitSphereDatabase.instances.terminate({
+    terminatedOn: new Date(),
+    instanceId: payload.instanceId,
+    actualCost: BigInt(payload.actualCost),
+    timeConsumed: BigInt(payload.timeConsumed),
+    refundAmount: BigInt(payload.refundAmount),
+  } satisfies TerminateInstanceParams);
+
   logger.info("Successfully processed termination request", {
     instanceId: payload.instanceId,
   });

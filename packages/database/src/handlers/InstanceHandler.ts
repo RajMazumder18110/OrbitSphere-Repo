@@ -5,11 +5,23 @@ import {
   instancesTable,
   InstanceStatus,
   type CreateInstanceParams,
+  type TerminateInstanceParams,
 } from "@/schemas";
 import type { DBType } from "./OrbitSphereBase";
 
 export class OrbitSphereInstanceHandler {
   constructor(private connection: DBType) {}
+
+  public async getInstanceBySphereId(sphereId: bigint) {
+    return this.connection.query.instancesTable.findFirst({
+      where: eq(instancesTable.sphereId, sphereId),
+      with: {
+        sphere: true,
+        region: true,
+        tenant: true,
+      },
+    });
+  }
 
   public async getInstanceByInstanceId(id: string) {
     return this.connection.query.instancesTable.findFirst({
@@ -66,12 +78,13 @@ export class OrbitSphereInstanceHandler {
     });
   }
 
-  public async terminate(instanceId: string) {
+  public async terminate(data: TerminateInstanceParams) {
     return this.connection
       .update(instancesTable)
       .set({
+        ...data,
         status: InstanceStatus.TERMINATED,
       })
-      .where(eq(instancesTable.instanceId, instanceId));
+      .where(eq(instancesTable.instanceId, data.instanceId));
   }
 }

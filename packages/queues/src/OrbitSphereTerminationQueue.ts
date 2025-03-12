@@ -7,6 +7,9 @@ import { Exchanges, ExchangeRoutes, Queues } from "@/constants";
 type TerminatePayload = {
   region: string;
   instanceId: string;
+  actualCost: string;
+  timeConsumed: string;
+  refundAmount: string;
 };
 
 export class OrbitSphereTerminationQueue extends OrbitSphereExchange {

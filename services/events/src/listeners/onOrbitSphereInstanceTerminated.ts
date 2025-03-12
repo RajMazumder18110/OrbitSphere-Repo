@@ -24,6 +24,9 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
       await orbitSphereTerminationQueue.publish({
         region: instance?.region!,
         instanceId: instance?.instanceId!,
+        actualCost: actualCost.toString(),
+        timeConsumed: timeConsumed.toString(),
+        refundAmount: refundAmount.toString(),
       });
 
       logger.info("Queued termination request", {

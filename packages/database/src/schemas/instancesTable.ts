@@ -80,7 +80,10 @@ export const instanceRelations = relations(instancesTable, ({ one }) => ({
 }));
 
 export type Instance = typeof instancesTable.$inferSelect;
-export type UpdateInstanceStateParams = Pick<Instance, "status">;
+export type TerminateInstanceParams = Pick<
+  Instance,
+  "actualCost" | "instanceId" | "terminatedOn" | "timeConsumed" | "refundAmount"
+>;
 export type CreateInstanceParams = Omit<
   typeof instancesTable.$inferInsert,
   "createdAt" | "updatedAt" | "id" | "status"
