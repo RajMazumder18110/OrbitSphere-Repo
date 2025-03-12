@@ -15,7 +15,7 @@ const Navigation = () => {
     <NavigationMenu className="dark">
       <NavigationMenuList className="py-1 px-2 border-gray border rounded-lg">
         <NavigationMenuItem>
-          <Link href="/dashboard?tab=running" legacyBehavior passHref>
+          <Link href="/dashboard?tab=running" legacyBehavior>
             <NavigationMenuLink
               tabName="running"
               className={navigationMenuTriggerStyle()}
@@ -26,7 +26,7 @@ const Navigation = () => {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <Link href="/dashboard?tab=terminated" legacyBehavior passHref>
+          <Link href="/dashboard?tab=terminated" legacyBehavior>
             <NavigationMenuLink
               tabName="terminated"
               className={navigationMenuTriggerStyle()}

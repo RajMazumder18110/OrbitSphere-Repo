@@ -83,7 +83,7 @@ export const NormalConnectButton = ({
           <Button
             className={`cursor-pointer ${className}`}
             type={!connected ? "button" : onConnectType ?? "button"}
-            onClick={connected ? openAccountModal : openConnectModal}
+            onClick={!connected ? openConnectModal : undefined}
             disabled={disabled ?? (isConnecting || connectModalOpen || !ready)}
           >
             {isConnecting || connectModalOpen ? (

@@ -12,7 +12,9 @@ import {
 import Navigation from "./Navigation";
 import { getInstancesBy } from "@/actions";
 import { Input } from "@/components/ui/input";
+import Authentication from "./Authentication";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { getIsAuthenticated } from "@/actions/authentication";
 
 /// DashboardLayout props
 type DashboardPageProps = {
@@ -23,6 +25,12 @@ type DashboardPageProps = {
 const tabs = ["running", "terminated"];
 
 const Dashboard = async ({ searchParams }: DashboardPageProps) => {
+  const isAuthenticated = await getIsAuthenticated();
+  /// If user is not authenticated
+  if (!isAuthenticated) {
+    return <Authentication />;
+  }
+
   const params = await searchParams;
   const tab = params.tab;
   /// If tab not found or any random tab

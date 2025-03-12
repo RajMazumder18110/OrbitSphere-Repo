@@ -178,8 +178,6 @@ export const getUtilizationData = async (): Promise<UtilizationData[]> =>
     ])
   );
 
-export const getIsAuthenticated = async () => true;
-
 export const getInstancesById = async (id: string): Promise<Instance> =>
   new Promise((resolve) =>
     resolve(fakeInstances.find((i) => i.instanceId === id)!)

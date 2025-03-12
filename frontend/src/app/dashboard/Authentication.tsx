@@ -13,16 +13,13 @@ import {
   NormalConnectButton,
   TrustWalletConnectButton,
 } from "../../components/ConnectButton";
-import DashboardNavbar from "./DashboardNavbar";
 import OrbitSphereIcon from "@/assets/orbitsphere.svg";
 import RainbowkitProviderComponent from "@/providers/RainbowkitProvider";
 
 const Authentication = () => {
   return (
     <RainbowkitProviderComponent>
-      <main className="w-full h-[78vh] md:h-[85vh] flex flex-col items-center justify-between ">
-        <DashboardNavbar />
-
+      <main className="w-full h-[78vh] md:h-[85vh] flex flex-col items-center justify-between">
         <div className="w-full min-h-full flex flex-col items-center">
           <section className="w-full h-full relative flex flex-col items-center justify-center">
             <Image

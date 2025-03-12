@@ -47,7 +47,7 @@ import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORBITSPHERE, USDC } from "@/constants";
 import Link from "next/link";
-import { NormalConnectButton } from "../../components/ConnectButton";
+import { NormalConnectButton } from "@/components/ConnectButton";
 
 /// Type
 type ILaunchInstanceFormProps = {

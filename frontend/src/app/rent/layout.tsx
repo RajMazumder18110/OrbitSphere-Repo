@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 /// Local imports
 import Navbar from "@/components/Navbar";
 
-const RentalPagelayout = ({ children }: { children: ReactNode }) => {
+const RentalPageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Navbar />
@@ -12,4 +12,4 @@ const RentalPagelayout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default RentalPagelayout;
+export default RentalPageLayout;
