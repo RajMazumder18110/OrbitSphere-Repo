@@ -11,7 +11,7 @@ export const spheresTable = pgTable("Spheres", {
   noOfCPUs: bigint({ mode: "bigint" }).notNull(),
   noOfGPUs: bigint({ mode: "bigint" }).notNull(),
   memoryGiB: bigint({ mode: "bigint" }).notNull(),
-  storageGib: bigint({ mode: "bigint" }).notNull(),
+  storageGiB: bigint({ mode: "bigint" }).notNull(),
   name: varchar({ length: 50 }).notNull().unique("sphere_name"),
 
   /// Timestamps
