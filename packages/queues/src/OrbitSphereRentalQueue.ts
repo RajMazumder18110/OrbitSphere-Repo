@@ -10,6 +10,9 @@ type RentalPayload = {
   sphereId: string;
   instanceType: string;
   sshPublicKey: string;
+  totalCost: string;
+  rentedOn: string;
+  willBeEndOn: string;
 };
 
 export class OrbitSphereRentalQueue extends OrbitSphereExchange {

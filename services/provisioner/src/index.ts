@@ -22,11 +22,14 @@ await orbitsphereRentalQueue.consume(async (payload) => {
   await orbitSphereDatabase.instances.create({
     region: payload.region,
     instanceId: InstanceId!,
-    instanceType: payload.instanceType,
-    sphereId: BigInt(payload.sphereId),
+    tenant: payload.tenant,
     publicIp: PublicIpAddress!,
     privateIp: PrivateIpAddress!,
-    tenant: payload.tenant,
+    sphere: payload.instanceType,
+    sphereId: BigInt(payload.sphereId),
+    totalCost: BigInt(payload.totalCost),
+    rentedOn: new Date(Number(payload.rentedOn) * 1_000),
+    willBeEndOn: new Date(Number(payload.willBeEndOn) * 1_000),
   } satisfies CreateInstanceParams);
 
   logger.info("Processed rental request", {

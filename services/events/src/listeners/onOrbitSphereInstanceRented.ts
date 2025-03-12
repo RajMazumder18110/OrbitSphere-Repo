@@ -41,6 +41,9 @@ await orbitsphere.onOrbitSphereInstanceRented(
         sshPublicKey,
         instanceType,
         sphereId: sphereId.toString(),
+        rentedOn: rentedOn.toString(),
+        totalCost: totalCost.toString(),
+        willBeEndOn: willBeEndOn.toString(),
       });
 
       logger.info("Queued rental request", {
