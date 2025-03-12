@@ -16,6 +16,8 @@ import { IoMdGlobe } from "react-icons/io";
 import { getAllActiveSpheres } from "@/actions";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Navbar from "@/components/Navbar";
+import OrbitSphereIcon from "@/assets/orbitsphere.svg";
+import Image from "next/image";
 
 export default async function Home() {
   const instances = await getAllActiveSpheres();
@@ -25,20 +27,27 @@ export default async function Home() {
       <Navbar />
       <div className="flex flex-col gap-25 items-center justify-items-center font-[family-name:var(--font-geist-sans)]">
         {/* Hero Section */}
-        <header className="flex flex-col mt-10 gap-5 items-center">
-          <h1 className="text-5xl font-bold font-[family-name:var(--font-geist-mono)]">
-            OrbitSphere
-          </h1>
-          <p className="text-lg text-center text-muted-foreground">
-            OrbitSphere is a decentralized cloud server rental platform where
-            users can rent pre-configured cloud servers and pay using USDC. The
-            system is powered by smart contracts.
-          </p>
-          <Link href={"/rent"}>
-            <Button className="cursor-pointer" variant="secondary">
-              <IoRocketSharp /> Launch
-            </Button>
-          </Link>
+        <header className="relative h-[80vh] flex flex-col mt-10 gap-5 items-center justify-center">
+          <Image
+            src={OrbitSphereIcon}
+            alt="OrbitSphere"
+            className="absolute inset-0 -z-50 opacity-80"
+          />
+          <div className="flex flex-col gap-5 items-center">
+            <h1 className="text-5xl font-bold font-[family-name:var(--font-geist-mono)]">
+              OrbitSphere
+            </h1>
+            <p className="text-lg text-center text-muted-foreground">
+              OrbitSphere is a decentralized cloud server rental platform where
+              users can rent pre-configured cloud servers and pay using USDC.
+              The system is powered by smart contracts.
+            </p>
+            <Link href={"/rent"}>
+              <Button className="cursor-pointer" variant="secondary">
+                <IoRocketSharp /> Launch
+              </Button>
+            </Link>
+          </div>
         </header>
 
         {/* Features Section */}
