@@ -1,16 +1,17 @@
 import { twMerge } from "tailwind-merge";
-import { padHex, stringToHex } from "viem";
+import { formatUnits, padHex, stringToHex } from "viem";
 import { clsx, type ClassValue } from "clsx";
-import { Instance } from "@/actions";
+import { IInstance } from "@/actions/database/instanceServices";
+// import { Instance } from "@/actions";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const calculateRefundAmount = (instance: Instance): number => {
+export const calculateRefundAmount = (instance: IInstance): number => {
   /// If instance is terminating or terminated
   if (instance.status === "QUEUED" || instance.status === "TERMINATED")
-    return 0;
+    return Number(formatUnits(instance.refundAmount ?? BigInt(0), 6));
 
   /// If instance is running
   const currentTime = new Date();
@@ -20,22 +21,23 @@ export const calculateRefundAmount = (instance: Instance): number => {
     (currentTime.getTime() - instance.rentedOn.getTime()) / 3600000; // Hours used
 
   if (elapsedTime >= totalDuration) return 0; // No refund if fully used
-  if (elapsedTime <= 0) return instance.totalCost; // Full refund if not started
+  if (elapsedTime <= 0) return Number(formatUnits(instance.totalCost, 6)); // Full refund if not started
 
-  const usedCost = elapsedTime * instance.sphere.hourlyRate;
-  const refundAmount = instance.totalCost - usedCost;
+  const usedCost =
+    elapsedTime * Number(formatUnits(instance.sphere.hourlyRate, 6));
+  const refundAmount = Number(formatUnits(instance.totalCost, 6)) - usedCost;
 
   return Math.max(Number(refundAmount.toFixed(2)), 0); // Ensure refund is not negative
 };
 
-export const isInstanceTerminated = (instance: Instance): boolean => {
+export const isInstanceTerminated = (instance: IInstance): boolean => {
   const currentTime = new Date();
   return (
     instance.status === "TERMINATED" || currentTime >= instance.willBeEndOn
   );
 };
 
-export const getTimeRemaining = (instance: Instance): string => {
+export const getTimeRemaining = (instance: IInstance): string => {
   /// If instance is terminating or terminated
   if (instance.status === "QUEUED" || instance.status === "TERMINATED")
     return "00:00";
@@ -54,7 +56,7 @@ export const getTimeRemaining = (instance: Instance): string => {
   )}`;
 };
 
-export const getCompletionPercentage = (instance: Instance): number => {
+export const getCompletionPercentage = (instance: IInstance): number => {
   /// If instance is terminating or terminated
   if (instance.status === "QUEUED" || instance.status === "TERMINATED")
     return 100;

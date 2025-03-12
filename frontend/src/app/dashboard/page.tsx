@@ -10,11 +10,12 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import Navigation from "./Navigation";
-import { getInstancesBy } from "@/actions";
 import { Input } from "@/components/ui/input";
 import Authentication from "./Authentication";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getIsAuthenticated } from "@/actions/authentication";
+import { getInstancesByStatus } from "@/actions/database/instanceServices";
+import { InstanceStatus } from "@orbitsphere/database/schemas";
 
 /// DashboardLayout props
 type DashboardPageProps = {
@@ -25,9 +26,9 @@ type DashboardPageProps = {
 const tabs = ["running", "terminated", "queued"];
 
 const Dashboard = async ({ searchParams }: DashboardPageProps) => {
-  const isAuthenticated = await getIsAuthenticated();
+  const authenticatedUser = await getIsAuthenticated();
   /// If user is not authenticated
-  if (!isAuthenticated) {
+  if (!authenticatedUser) {
     return <Authentication />;
   }
 
@@ -38,7 +39,10 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
     redirect("/dashboard?tab=running");
   }
   /// Grabbing instances
-  const instances = await getInstancesBy(tab);
+  const instances = await getInstancesByStatus({
+    address: authenticatedUser.address,
+    status: tab.toUpperCase() as InstanceStatus,
+  });
 
   return (
     <main className="w-full grow flex flex-col gap-7 mt-5">
@@ -64,6 +68,13 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
         </div>
       </div>
 
+      {!Boolean(instances.length) && (
+        <div className="w-full h-full flex items-center justify-center">
+          <h1 className="text-2xl font-[family-name:var(--font-geist-mono)]">
+            No instance found
+          </h1>
+        </div>
+      )}
       <section className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4">
         {instances.map((instance) => (
           <Link
@@ -85,7 +96,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
                   {/* <CardTitle>Running </CardTitle> */}
                   <CardDescription className="text-md font-[family-name:var(--font-geist-mono)]">
                     <div className="flex flex-col items-center">
-                      <p>({instance.id})</p>
+                      <p>({instance.sphereId})</p>
                       <p>{instance.instanceId}</p>
                     </div>
                   </CardDescription>

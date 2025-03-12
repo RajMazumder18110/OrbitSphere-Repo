@@ -1,5 +1,5 @@
 /** @notice Library imports */
-import { fromBytes32 } from "@orbitsphere/orbiter";
+import { fromBytes, fromBytes32 } from "@orbitsphere/orbiter";
 import type { CreateRentalLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
 import {
@@ -24,7 +24,7 @@ await orbitsphere.onOrbitSphereInstanceRented(
     try {
       /// Converting into utf8
       region = fromBytes32(region);
-      sshPublicKey = fromBytes32(sshPublicKey);
+      sshPublicKey = fromBytes(sshPublicKey);
       instanceType = fromBytes32(instanceType);
 
       logger.info("Requested for instance", {

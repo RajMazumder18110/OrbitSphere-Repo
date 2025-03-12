@@ -13,14 +13,15 @@ import { LuServerCog } from "react-icons/lu";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { GrSecure } from "react-icons/gr";
 import { IoMdGlobe } from "react-icons/io";
-import { getAllActiveSpheres } from "@/actions";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Navbar from "@/components/Navbar";
 import OrbitSphereIcon from "@/assets/orbitsphere.svg";
 import Image from "next/image";
+import { getAllSpheres } from "@/actions/database/sphereServices";
+import { formatUnits } from "viem";
 
 export default async function Home() {
-  const instances = await getAllActiveSpheres();
+  const instances = await getAllSpheres();
 
   return (
     <>
@@ -143,7 +144,7 @@ export default async function Home() {
               {instances.map((instance) => (
                 <Card className="dark w-[15rem] p-4 gap-3" key={instance.name}>
                   <CardHeader className="flex items-center justify-center text-lg p-0 font-semibold font-[family-name:var(--font-geist-mono)]">
-                    {instance.hourlyRate} USDC/hour
+                    {formatUnits(instance.hourlyRate, 6)} USDC/hour
                   </CardHeader>
                   <CardDescription className="flex items-center justify-center text-md font-semibold font-[family-name:var(--font-geist-mono)]">
                     {instance.name}
@@ -151,18 +152,18 @@ export default async function Home() {
                   <CardContent className="w-full py-2 flex flex-col">
                     <div className="w-full flex items-center justify-between">
                       <h1 className="text-muted-foreground">
-                        vCPUs: {instance.noOfCPUs}
+                        vCPUs: {instance.noOfCPUs.toString()}
                       </h1>
                       <h1 className="text-muted-foreground">
-                        GPUs: {instance.noOfGPUs}
+                        GPUs: {instance.noOfGPUs.toString()}
                       </h1>
                     </div>
                     <div className="w-full flex items-center justify-between">
                       <h1 className="text-muted-foreground">
-                        mGiB: {instance.memoryGBs}
+                        mGiB: {instance.memoryGiB.toString()}
                       </h1>
                       <h1 className="text-muted-foreground">
-                        sGiB: {instance.sGiB}
+                        sGiB: {instance.storageGiB.toString()}
                       </h1>
                     </div>
                   </CardContent>

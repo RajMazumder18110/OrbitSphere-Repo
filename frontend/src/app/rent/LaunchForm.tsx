@@ -27,7 +27,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import SSHKeyHolder from "./SSHKeyHolder";
-import { IRegion, ISphere } from "@/actions";
 import { Button } from "@/components/ui/button";
 import GenerateSSHKeyButton from "./GenerateSSHKeyButton";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -46,11 +45,13 @@ import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORBITSPHERE, USDC } from "@/constants";
 import { NormalConnectButton } from "@/components/ConnectButton";
+import { Region, Sphere } from "@orbitsphere/database/schemas";
+import { IoRocketSharp } from "react-icons/io5";
 
 /// Type
 type ILaunchInstanceFormProps = {
-  regions: IRegion[];
-  instances: ISphere[];
+  regions: Region[];
+  instances: Sphere[];
 };
 
 /// Component
@@ -284,7 +285,7 @@ const LaunchInstanceForm = ({
                           <IoMdRadioButtonOff />
                         )}
                         <CardHeader className="flex items-center justify-center text-lg p-0 font-semibold">
-                          {instance.hourlyRate} USDC/hour
+                          {formatUnits(instance.hourlyRate, 6)} USDC/hour
                         </CardHeader>
                         <CardDescription className="flex items-center justify-center text-md font-semibold">
                           {instance.name}
@@ -292,18 +293,18 @@ const LaunchInstanceForm = ({
                         <CardContent className="w-full py-2 flex flex-col">
                           <div className="w-full flex items-center justify-between">
                             <h1 className="text-muted-foreground">
-                              vCPUs: {instance.noOfCPUs}
+                              vCPUs: {instance.noOfCPUs.toString()}
                             </h1>
                             <h1 className="text-muted-foreground">
-                              GPUs: {instance.noOfGPUs}
+                              GPUs: {instance.noOfGPUs.toString()}
                             </h1>
                           </div>
                           <div className="w-full flex items-center justify-between">
                             <h1 className="text-muted-foreground">
-                              mGiB: {instance.memoryGBs}
+                              mGiB: {instance.memoryGiB.toString()}
                             </h1>
                             <h1 className="text-muted-foreground">
-                              sGiB: {instance.sGiB}
+                              sGiB: {instance.storageGiB.toString()}
                             </h1>
                           </div>
                         </CardContent>
@@ -379,7 +380,22 @@ const LaunchInstanceForm = ({
               />
             </div>
             <DialogTrigger asChild>
-              {!isConnected && <NormalConnectButton className="self-end" />}
+              {!isConnected ? (
+                <NormalConnectButton className="self-end" />
+              ) : (
+                <Button
+                  className="cursor-pointer"
+                  variant={"secondary"}
+                  type="submit"
+                >
+                  {isDialogOpen ? (
+                    <RiLoader4Line className="animate-spin" />
+                  ) : (
+                    <IoRocketSharp />
+                  )}
+                  {isDialogOpen ? "Launching" : "Launch"}
+                </Button>
+              )}
             </DialogTrigger>
           </section>
         </div>

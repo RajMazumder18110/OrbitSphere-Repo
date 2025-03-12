@@ -2,6 +2,8 @@
 /** @notice Library imports */
 import { toast } from "sonner";
 import { useState } from "react";
+import { RiLoader4Line } from "react-icons/ri";
+import { FaRegCheckCircle } from "react-icons/fa";
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 /// Local imports
 import {
@@ -15,10 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { ORBITSPHERE } from "@/constants";
-import { FaRegCheckCircle } from "react-icons/fa";
-import { RiLoader4Line } from "react-icons/ri";
 
-const Terminate = ({ sphereId }: { sphereId: string }) => {
+const Terminate = ({ sphereId }: { sphereId: bigint }) => {
   /// States
   const [currentStatus, setCurrentStatus] = useState("");
   const [isTxnSuccess, setIsTxnSuccess] = useState(false);
@@ -49,7 +49,7 @@ const Terminate = ({ sphereId }: { sphereId: string }) => {
         address: ORBITSPHERE,
         abi: orbitSphereAbi,
         functionName: "terminateOrbitSphereInstance",
-        args: [BigInt(sphereId)],
+        args: [sphereId],
       });
 
       /// Waiting for transaction receipt

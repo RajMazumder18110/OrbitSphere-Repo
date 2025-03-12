@@ -22,7 +22,7 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
       });
 
       await orbitSphereTerminationQueue.publish({
-        region: instance?.region!,
+        region: instance?.region!.value,
         instanceId: instance?.instanceId!,
         actualCost: actualCost.toString(),
         timeConsumed: timeConsumed.toString(),

@@ -30,7 +30,7 @@ import {
   getTimeRemaining,
   isInstanceTerminated,
 } from "@/lib/utils";
-import { getInstancesById, getUtilizationData } from "@/actions";
+import { getUtilizationData } from "@/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -43,6 +43,8 @@ import {
 import CopyButton from "@/components/CopyButton";
 import Terminate from "./Terminate";
 import ServerNotFoundImage from "@/assets/not-found.svg";
+import { getInstanceByInstanceId } from "@/actions/database/instanceServices";
+import { formatUnits } from "viem";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -56,7 +58,7 @@ const SingleInstanceDetails = async ({
 }: SingleInstanceDetailsProps) => {
   const { instanceId } = await params;
   /// Grabbing data from database
-  const instance = await getInstancesById(instanceId);
+  const instance = await getInstanceByInstanceId(instanceId);
 
   /** @notice Incase if instance not found with id */
   if (!instance) {
@@ -128,7 +130,7 @@ const SingleInstanceDetails = async ({
                     Connect
                   </Button>
                 </DialogTrigger>
-                <Terminate sphereId={instance.id} />
+                <Terminate sphereId={instance.sphereId} />
               </div>
             )}
           </header>
@@ -136,7 +138,11 @@ const SingleInstanceDetails = async ({
           <section className="w-full flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <LuCalendarClock className="text-2xl" />
-              <h1>{instance.willBeEndOn.toString()}</h1>
+              <h1>
+                {instance.status === "TERMINATED"
+                  ? instance.terminatedOn!.toString()
+                  : instance.willBeEndOn.toString()}
+              </h1>
             </div>
             <div className="flex items-center gap-3">
               <Badge className="text-xs font-semibold dark rounded-full">
@@ -172,7 +178,10 @@ const SingleInstanceDetails = async ({
               <div className="flex flex-col gap-1 items-center">
                 <CardTitle>Consumed</CardTitle>
                 <CardDescription>
-                  {(instance.totalCost - refundAmount).toFixed(2)} USDC
+                  {(
+                    Number(formatUnits(instance.totalCost, 6)) - refundAmount
+                  ).toFixed(2)}{" "}
+                  USDC
                 </CardDescription>
               </div>
             </CardHeader>
@@ -202,7 +211,7 @@ const SingleInstanceDetails = async ({
               <IoMdGlobe className="text-2xl" />
               <div className="flex flex-col gap-1 items-center">
                 <CardTitle>Sphere</CardTitle>
-                <CardDescription>{instance.id}</CardDescription>
+                <CardDescription>{instance.sphereId}</CardDescription>
               </div>
             </CardHeader>
           </Card>
@@ -211,7 +220,7 @@ const SingleInstanceDetails = async ({
               <LuServer className="text-2xl" />
               <div className="flex flex-col gap-1 items-center">
                 <CardTitle>Type</CardTitle>
-                <CardDescription>{instance.instanceType}</CardDescription>
+                <CardDescription>{instance.sphere.name}</CardDescription>
               </div>
             </CardHeader>
           </Card>
@@ -230,7 +239,7 @@ const SingleInstanceDetails = async ({
               <div className="flex flex-col gap-1 items-center">
                 <CardTitle>Memory</CardTitle>
                 <CardDescription>
-                  {instance.sphere.memoryGBs} GiB
+                  {instance.sphere.memoryGiB} GiB
                 </CardDescription>
               </div>
             </CardHeader>
@@ -239,8 +248,12 @@ const SingleInstanceDetails = async ({
 
         <section className="dark grid grid-cols-1 sm:grid-cols-3 gap-5 text-center">
           <RadialChart
+            status={instance.status}
             value={refundAmount}
-            circleFillDeg={getDegree(refundAmount, instance.totalCost)}
+            circleFillDeg={getDegree(
+              refundAmount,
+              Number(formatUnits(instance.totalCost, 6))
+            )}
           />
           <UtilizationChart data={utilizationData} />
         </section>

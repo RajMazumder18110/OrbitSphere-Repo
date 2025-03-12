@@ -1,5 +1,5 @@
 /** @notice Library imports */
-import { z } from "zod";
+import { Hex } from "viem";
 import { toast } from "sonner";
 import { useState } from "react";
 import { MdKey } from "react-icons/md";
@@ -24,11 +24,9 @@ const GenerateSSHKeyButton = ({
     try {
       /// Generating key pair
       const { publicKey, privateKey } = await generateKeyPair();
-      setValue("sshPubKey", publicKey);
+      setValue("sshPubKey", publicKey as Hex);
 
       /// Create a Blob and trigger file download as PEM file
-      /*
-      
       const blob = new Blob([privateKey], { type: "application/x-pem-file" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
@@ -36,8 +34,6 @@ const GenerateSSHKeyButton = ({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-
-      */
 
       /// Show success message
       toast("SSH KeyPair generated", {

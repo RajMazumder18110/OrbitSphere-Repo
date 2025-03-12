@@ -28,7 +28,7 @@ export const getIsAuthenticated = async () => {
 
   try {
     const payload = verify(cookie.value, COOKIE_SECRET!) as {
-      account: string;
+      address: string;
     };
     return payload;
   } catch (error) {

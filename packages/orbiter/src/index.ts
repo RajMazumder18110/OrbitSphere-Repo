@@ -60,5 +60,7 @@ const fromBytes32 = (value: string) => {
   return data.substring(0, data.indexOf("\u0000"));
 };
 
+const fromBytes = (value: string) => toUtf8String(value);
+
 /** @notice Exports */
-export { OrbitSphere, orbitSphereAbi, fromBytes32 };
+export { OrbitSphere, orbitSphereAbi, fromBytes32, fromBytes };

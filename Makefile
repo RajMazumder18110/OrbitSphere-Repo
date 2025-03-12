@@ -9,6 +9,8 @@ rent:
 terminate:
 	@cast send 0x972b861ebBf74583F2F27C42d11132b03EB8d493 "terminateOrbitSphereInstance(uint256)" $(id) --account orbitsphere --rpc-url $(BLOCKCHAIN_RPC_ENDPOINT)
 
+dev-frontend:
+	@bunx dotenv -e .env -- bun run --filter "@orbitsphere/frontend" dev
 
 dev:
 	@bunx dotenv -e .env -- bun run --filter "*" dev 
