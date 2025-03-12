@@ -61,8 +61,8 @@ const SingleInstanceDetails = async ({
   /** @notice Incase if instance not found with id */
   if (!instance) {
     return (
-      <div className="w-full flex flex-col gap-10 font-[family-name:var(--font-geist-mono)]">
-        <div className="flex gap-7">
+      <div className="w-full h-full flex flex-col gap-10 font-[family-name:var(--font-geist-mono)]">
+        <div className="flex gap-7 mt-4">
           <Breadcrumbs />
         </div>
         <div className="min-h-[50vh] flex flex-col items-center justify-center gap-10">

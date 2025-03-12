@@ -1,46 +1,39 @@
-"use client";
 import Link from "next/link";
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
-import { useRouter, useSearchParams } from "next/navigation";
 /// Local imports
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import Breadcrumbs from "@/components/Breadcrumbs";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import Navigation from "./Navigation";
+import { getInstancesBy } from "@/actions";
 import { Input } from "@/components/ui/input";
-import { getInstancesBy, Instance } from "@/actions";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
-const DashboardPage = () => {
-  const router = useRouter();
-  const params = useSearchParams();
-  const [instances, setInstances] = useState<Instance[]>([]);
+/// DashboardLayout props
+type DashboardPageProps = {
+  searchParams: Promise<{ tab: string }>;
+};
 
-  const currentTab = params.get("tab")!;
+/// Active tabs
+const tabs = ["running", "terminated"];
 
-  useEffect(() => {
-    router.replace("/dashboard?tab=running");
-  }, []);
-
-  useEffect(() => {
-    getInstancesBy(params.get("tab") ?? currentTab).then((data) =>
-      setInstances(() => data)
-    );
-  }, [params]);
+const Dashboard = async ({ searchParams }: DashboardPageProps) => {
+  const params = await searchParams;
+  const tab = params.tab;
+  /// If tab not found or any random tab
+  if (!tabs.includes(tab)) {
+    redirect("/dashboard?tab=running");
+  }
+  /// Grabbing instances
+  const instances = await getInstancesBy(tab);
 
   return (
-    <main className="flex flex-col gap-7">
+    <main className="w-full h-full flex flex-col gap-7 mt-5">
       <div className="flex flex-col gap-5">
         <Breadcrumbs />
         <h1 className="text-2xl font-semibold font-[family-name:var(--font-geist-mono)]">
@@ -49,32 +42,7 @@ const DashboardPage = () => {
       </div>
 
       <div className="w-full flex items-center justify-between">
-        <NavigationMenu className="dark">
-          <NavigationMenuList className="py-1 px-2 border-gray border rounded-lg">
-            <NavigationMenuItem>
-              <Link href="/dashboard?tab=running" legacyBehavior passHref>
-                <NavigationMenuLink
-                  tabName="running"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Running
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <Link href="/dashboard?tab=terminated" legacyBehavior passHref>
-                <NavigationMenuLink
-                  tabName="terminated"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Terminated
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-
+        <Navigation />
         <div className="relative w-full max-w-40">
           <Input
             type="text"
@@ -131,4 +99,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default Dashboard;

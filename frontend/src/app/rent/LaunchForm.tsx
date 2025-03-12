@@ -47,6 +47,7 @@ import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORBITSPHERE, USDC } from "@/constants";
 import Link from "next/link";
+import { NormalConnectButton } from "../../components/ConnectButton";
 
 /// Type
 type ILaunchInstanceFormProps = {
@@ -73,8 +74,7 @@ const LaunchInstanceForm = ({
   const [isTxnSuccess, setIsTxnSuccess] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentTransactionStatus, setCurrentTransactionStatus] = useState("");
-  const { isConnected, isConnecting, address } = useAccount();
-  const { openConnectModal, connectModalOpen } = useConnectModal();
+  const { isConnected, address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
 
@@ -389,28 +389,12 @@ const LaunchInstanceForm = ({
               />
             </div>
             <DialogTrigger asChild>
-              <Button
-                variant="secondary"
-                className="cursor-pointer self-end"
-                disabled={connectModalOpen || isConnecting || isDialogOpen}
-                type={!isConnected ? "button" : "submit"}
-                onClick={!isConnected ? openConnectModal : undefined}
-              >
-                {!isConnected ? (
-                  <MdOutlineWallet />
-                ) : isDialogOpen ? (
-                  <RiLoader4Line className="animate-spin" />
-                ) : (
-                  <IoRocketSharp />
-                )}
-                {connectModalOpen || isConnecting
-                  ? "Connecting"
-                  : !isConnected
-                  ? "Connect"
-                  : isDialogOpen
-                  ? "Launching"
-                  : "Launch"}
-              </Button>
+              <NormalConnectButton
+                className="self-end"
+                disabled={isDialogOpen}
+                onConnectType={"submit"}
+                text={isDialogOpen ? "Launching" : "Launch"}
+              ></NormalConnectButton>
             </DialogTrigger>
           </section>
         </div>
