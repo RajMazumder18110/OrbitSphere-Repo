@@ -22,7 +22,7 @@ type DashboardPageProps = {
 };
 
 /// Active tabs
-const tabs = ["running", "terminated"];
+const tabs = ["running", "terminated", "queued"];
 
 const Dashboard = async ({ searchParams }: DashboardPageProps) => {
   const isAuthenticated = await getIsAuthenticated();
@@ -34,7 +34,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
   const params = await searchParams;
   const tab = params.tab;
   /// If tab not found or any random tab
-  if (!tabs.includes(tab)) {
+  if (!tab || !tabs.includes(tab)) {
     redirect("/dashboard?tab=running");
   }
   /// Grabbing instances
@@ -55,7 +55,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
           <Input
             type="text"
             placeholder="Search sphere"
-            className="pl-10 dark" // Adds padding to prevent overlap with the icon
+            className="pl-10 dark"
           />
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -64,7 +64,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
         </div>
       </div>
 
-      <section className="w-full grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+      <section className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4">
         {instances.map((instance) => (
           <Link
             href={`/dashboard/${instance.instanceId}`}
@@ -75,6 +75,8 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
                 className={`${
                   instance.status === "TERMINATED"
                     ? "text-red-500"
+                    : instance.status === "QUEUED"
+                    ? "text-yellow-400 animate-pulse"
                     : "text-green-400 animate-pulse"
                 } text-md absolute top-2 right-2`}
               />

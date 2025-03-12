@@ -8,6 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const calculateRefundAmount = (instance: Instance): number => {
+  /// If instance is terminating or terminated
+  if (instance.status === "QUEUED" || instance.status === "TERMINATED")
+    return 0;
+
+  /// If instance is running
   const currentTime = new Date();
   const totalDuration =
     (instance.willBeEndOn.getTime() - instance.rentedOn.getTime()) / 3600000; // Total hours
@@ -30,9 +35,14 @@ export const isInstanceTerminated = (instance: Instance): boolean => {
   );
 };
 
-export const getTimeRemaining = (willBeEndOn: Date): string => {
+export const getTimeRemaining = (instance: Instance): string => {
+  /// If instance is terminating or terminated
+  if (instance.status === "QUEUED" || instance.status === "TERMINATED")
+    return "00:00";
+
+  /// If instance is running
   const currentTime = new Date();
-  const timeRemaining = willBeEndOn.getTime() - currentTime.getTime();
+  const timeRemaining = instance.willBeEndOn.getTime() - currentTime.getTime();
 
   if (timeRemaining <= 0) return "00:00:00"; // Already completed
   const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
@@ -44,13 +54,16 @@ export const getTimeRemaining = (willBeEndOn: Date): string => {
   )}`;
 };
 
-export const getCompletionPercentage = (
-  rentedOn: Date,
-  willBeEndOn: Date
-): number => {
+export const getCompletionPercentage = (instance: Instance): number => {
+  /// If instance is terminating or terminated
+  if (instance.status === "QUEUED" || instance.status === "TERMINATED")
+    return 100;
+
+  /// If instance is running
   const currentTime = new Date();
-  const totalDuration = willBeEndOn.getTime() - rentedOn.getTime();
-  const elapsedTime = currentTime.getTime() - rentedOn.getTime();
+  const totalDuration =
+    instance.willBeEndOn.getTime() - instance.rentedOn.getTime();
+  const elapsedTime = currentTime.getTime() - instance.rentedOn.getTime();
   if (elapsedTime <= 0) return 0; // Not started
   if (elapsedTime >= totalDuration) return 100; // Already completed
   return Math.floor((elapsedTime / totalDuration) * 100);

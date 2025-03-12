@@ -14,22 +14,33 @@ const Navigation = () => {
   return (
     <NavigationMenu className="dark">
       <NavigationMenuList className="py-1 px-2 border-gray border rounded-lg">
-        <NavigationMenuItem>
+        <NavigationMenuItem className="cursor-pointer">
           <Link href="/dashboard?tab=running" legacyBehavior>
             <NavigationMenuLink
               tabName="running"
-              className={navigationMenuTriggerStyle()}
+              className={`${navigationMenuTriggerStyle()} text-muted-foreground`}
             >
               Running
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
+        <NavigationMenuItem className="cursor-pointer">
+          <Link href="/dashboard?tab=queued" legacyBehavior>
+            <NavigationMenuLink
+              tabName="queued"
+              className={`${navigationMenuTriggerStyle()} text-muted-foreground`}
+            >
+              Queued
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem className="cursor-pointer">
           <Link href="/dashboard?tab=terminated" legacyBehavior>
             <NavigationMenuLink
               tabName="terminated"
-              className={navigationMenuTriggerStyle()}
+              className={`${navigationMenuTriggerStyle()} text-muted-foreground`}
             >
               Terminated
             </NavigationMenuLink>

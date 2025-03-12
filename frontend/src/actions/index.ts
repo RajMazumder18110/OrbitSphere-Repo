@@ -7,11 +7,11 @@ export type Instance = {
   instanceType: string;
   publicIp: string;
   privateIp: string;
-  status: "RUNNING" | "TERMINATED";
   rentedOn: Date;
   totalCost: number;
   willBeEndOn: Date;
   sphere: ISphere;
+  status: "RUNNING" | "TERMINATED" | "QUEUED";
 };
 
 export interface IRegion {
@@ -153,6 +153,31 @@ const fakeInstances: Instance[] = [
     rentedOn: new Date("2025-03-01T08:30:00Z"),
     totalCost: 4.8,
     willBeEndOn: new Date("2025-03-10T08:30:00Z"),
+    sphere: {
+      name: "t2.micro",
+      hourlyRate: 0.02, // 0.02 USDT
+      noOfCPUs: 1,
+      noOfGPUs: 0,
+      memoryGBs: 1,
+      sGiB: 8,
+      isEnabled: true,
+    },
+  },
+  {
+    id: "6",
+    instanceId: "i-0abcd1234efgh5679",
+    region: {
+      name: "Asia (Mumbai)",
+      value: "ap-south-1",
+      isEnabled: true,
+    },
+    instanceType: "t3.micro",
+    publicIp: "54.172.98.23",
+    privateIp: "172.31.25.10",
+    status: "QUEUED",
+    rentedOn: new Date("2025-03-10T14:00:00Z"),
+    totalCost: 2.88,
+    willBeEndOn: new Date("2025-03-16T14:00:00Z"),
     sphere: {
       name: "t2.micro",
       hourlyRate: 0.02, // 0.02 USDT

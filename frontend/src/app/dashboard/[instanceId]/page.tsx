@@ -1,12 +1,13 @@
 /** @notice library imports */
 import Link from "next/link";
+import Image from "next/image";
 import { FaMemory } from "react-icons/fa";
 import { IoGitNetwork } from "react-icons/io5";
 import { TbClockPlay } from "react-icons/tb";
 import { BsFillCpuFill } from "react-icons/bs";
 import { IoLogoUsd, IoMdGlobe } from "react-icons/io";
 import { FaLocationCrosshairs } from "react-icons/fa6";
-import { LuCalendarClock, LuServer, LuServerOff } from "react-icons/lu";
+import { LuCalendarClock, LuServer } from "react-icons/lu";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 /// Local imports
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -42,7 +43,6 @@ import {
 import CopyButton from "@/components/CopyButton";
 import Terminate from "./Terminate";
 import ServerNotFoundImage from "@/assets/not-found.svg";
-import Image from "next/image";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -95,14 +95,11 @@ const SingleInstanceDetails = async ({
   /// Calculating data
   const isTerminated = isInstanceTerminated(instance);
   const refundAmount = calculateRefundAmount(instance);
-  const completedPercentage = getCompletionPercentage(
-    instance.rentedOn,
-    instance.willBeEndOn
-  );
+  const completedPercentage = getCompletionPercentage(instance);
 
   return (
     <Dialog>
-      <div className="w-full flex flex-col gap-10">
+      <div className="w-full flex flex-col gap-10 mt-3">
         <div className="flex flex-col gap-7">
           <Breadcrumbs />
           <header className="flex justify-between gap-3 items-center">
@@ -112,11 +109,15 @@ const SingleInstanceDetails = async ({
               </h1>
               <MdOutlineRadioButtonChecked
                 className={`${
-                  isTerminated ? "text-red-500" : "text-green-500 animate-pulse"
+                  instance.status === "QUEUED"
+                    ? "text-yellow-500 animate-pulse"
+                    : isTerminated
+                    ? "text-red-500"
+                    : "text-green-500 animate-pulse"
                 } text-xl`}
               />
             </div>
-            {!isTerminated && (
+            {instance.status !== "QUEUED" && !isTerminated && (
               <div className="flex items-center gap-4">
                 <DialogTrigger asChild>
                   <Button
@@ -156,7 +157,11 @@ const SingleInstanceDetails = async ({
               <div className="flex flex-col gap-1 items-center">
                 <CardTitle>Status</CardTitle>
                 <CardDescription>
-                  {isTerminated ? "Terminated" : "Running"}
+                  {instance.status === "QUEUED"
+                    ? "Terminating"
+                    : isTerminated
+                    ? "Terminated"
+                    : "Running"}
                 </CardDescription>
               </div>
             </CardHeader>
@@ -177,9 +182,7 @@ const SingleInstanceDetails = async ({
               <TbClockPlay className="text-2xl" />
               <div className="flex flex-col gap-1 items-center">
                 <CardTitle>Remaining</CardTitle>
-                <CardDescription>
-                  {getTimeRemaining(instance.willBeEndOn)}
-                </CardDescription>
+                <CardDescription>{getTimeRemaining(instance)}</CardDescription>
               </div>
             </CardHeader>
           </Card>

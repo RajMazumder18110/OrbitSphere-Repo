@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   return (
-    <nav className="w-full flex items-center justify-between py-1 font-medium border-b-2 gray-border">
+    <nav className="w-full flex items-center justify-between py-2 font-medium border-b-2 gray-border">
       <Link href={"/"}>
         <header className="flex items-center gap-1">
           <FaGlobeAsia className="text-xl" />
