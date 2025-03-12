@@ -1,25 +1,61 @@
 /** @notice library imports */
-import { eq } from "drizzle-orm";
+import { and, eq, gt, lte, or, sql } from "drizzle-orm";
 /// Local imports
-import type { DBType } from "./OrbitSphereBase";
 import {
   instancesTable,
   InstanceStatus,
   type CreateInstanceParams,
 } from "@/schemas";
+import type { DBType } from "./OrbitSphereBase";
 
 export class OrbitSphereInstanceHandler {
   constructor(private connection: DBType) {}
 
-  public async getInstanceBySphereId(id: bigint) {
-    return this.connection.query.instancesTable.findFirst({
-      where: eq(instancesTable.sphereId, id),
-    });
-  }
-
   public async getInstanceByInstanceId(id: string) {
     return this.connection.query.instancesTable.findFirst({
       where: eq(instancesTable.instanceId, id),
+      with: {
+        sphere: true,
+        region: true,
+        tenant: true,
+      },
+    });
+  }
+
+  public async getInstancesByStatus(params: {
+    page?: number;
+    limit?: number;
+    status: InstanceStatus;
+  }) {
+    /// Where condition
+    let whereCondition;
+    if (params.status === InstanceStatus.TERMINATED) {
+      whereCondition = eq(instancesTable.status, params.status);
+    } else if (params.status === InstanceStatus.QUEUED) {
+      whereCondition = or(
+        eq(instancesTable.status, InstanceStatus.QUEUED),
+        lte(instancesTable.willBeEndOn, sql`now()`)
+      );
+    } else {
+      whereCondition = and(
+        eq(instancesTable.status, InstanceStatus.RUNNING),
+        gt(instancesTable.willBeEndOn, sql`now()`)
+      );
+    }
+
+    /// Pagination
+    const limit = (params.limit ?? 8) >= 8 ? 8 : params.limit;
+    const offset = ((params.page ?? 0) - 1) * limit!;
+
+    return this.connection.query.instancesTable.findMany({
+      offset,
+      limit,
+      with: {
+        sphere: true,
+        region: true,
+        tenant: true,
+      },
+      where: whereCondition,
     });
   }
 

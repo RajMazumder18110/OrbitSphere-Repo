@@ -2,4 +2,6 @@
 export * from "./tenants";
 export * from "./rentalLogs";
 export * from "./terminateLogs";
-export * from "./instances";
+export * from "./instancesTable";
+export * from "./regionsTable";
+export * from "./spheresTable";
