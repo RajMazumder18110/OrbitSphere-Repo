@@ -36,8 +36,6 @@ export default function RootLayout({
       >
         <div className="max-w-5xl w-[90%] m-auto flex flex-col gap-5">
           {children}
-
-          <Footer />
           <Toaster theme="dark" />
         </div>
       </body>

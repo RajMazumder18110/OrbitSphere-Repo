@@ -41,7 +41,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
   const instances = await getInstancesBy(tab);
 
   return (
-    <main className="w-full h-full flex flex-col gap-7 mt-5">
+    <main className="w-full grow flex flex-col gap-7 mt-5">
       <div className="flex flex-col gap-5">
         <Breadcrumbs />
         <h1 className="text-2xl font-semibold font-[family-name:var(--font-geist-mono)]">

@@ -1,7 +1,9 @@
 /** @notice library imports */
 import { ReactNode } from "react";
 /// Local imports
+import Footer from "@/components/Footer";
 import DashboardNavbar from "./DashboardNavbar";
+import RainbowkitProviderComponent from "@/providers/RainbowkitProvider";
 
 /// DashboardLayout props
 type DashboardLayoutProps = {
@@ -10,10 +12,13 @@ type DashboardLayoutProps = {
 
 const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   return (
-    <main className="w-full h-[85vh] flex flex-col items-center ">
-      <DashboardNavbar />
-      {children}
-    </main>
+    <RainbowkitProviderComponent>
+      <main className="w-full h-[97.6vh] max-h-screen flex flex-col items-center ">
+        <DashboardNavbar />
+        {children}
+        <Footer />
+      </main>
+    </RainbowkitProviderComponent>
   );
 };
 
