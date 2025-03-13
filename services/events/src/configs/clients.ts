@@ -3,9 +3,9 @@ import { OrbitSphere } from "@orbitsphere/orbiter";
 import { createOrbitSphereLogger } from "@orbitsphere/logger";
 import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 import {
-  OrbitSphereRentalQueue,
-  OrbitSphereTerminationQueue,
-} from "@orbitsphere/queues";
+  RentalMessageProducer,
+  TerminationMessageProducer,
+} from "@orbitsphere/broker";
 /// Local imports
 import { environment } from "./environments";
 
@@ -23,10 +23,15 @@ export const orbitSphereDatabase = new OrbitSphereDatabase(
   OrbitSphereDatabase.databaseUrl
 );
 
-/// Queues
-export const orbitsphereRentalQueue = new OrbitSphereRentalQueue();
-export const orbitSphereTerminationQueue = new OrbitSphereTerminationQueue();
-await orbitsphereRentalQueue.initialize(environment.RABBITMQ_CONNECTION_URL);
-await orbitSphereTerminationQueue.initialize(
-  environment.RABBITMQ_CONNECTION_URL
+/// Messaging brokers
+export const orbitsphereRentalEventProducer = new RentalMessageProducer(
+  "@orbitsphere-events",
+  [environment.KAFKA_CONNECTION_URL]
 );
+export const orbitSphereTerminationEventProducer =
+  new TerminationMessageProducer("@orbitsphere-events", [
+    environment.KAFKA_CONNECTION_URL,
+  ]);
+
+await orbitsphereRentalEventProducer.connect();
+await orbitSphereTerminationEventProducer.connect();

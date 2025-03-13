@@ -5,10 +5,10 @@ import {
   logger,
   orbitsphereAWS,
   orbitSphereDatabase,
-  orbitSphereTerminationQueue,
+  orbitSphereTerminationConsumer,
 } from "@/configs/clients";
 
-await orbitSphereTerminationQueue.consume(async (payload) => {
+await orbitSphereTerminationConsumer.consume(async (payload) => {
   logger.info("Processing termination payload", payload);
   /// Terminating AWS instance
   const response = await orbitsphereAWS.terminate(payload);

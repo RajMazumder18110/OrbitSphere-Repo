@@ -5,10 +5,10 @@ import {
   logger,
   orbitsphereAWS,
   orbitSphereDatabase,
-  orbitsphereRentalQueue,
+  orbitsphereRentalConsumer,
 } from "@/configs/clients";
 
-await orbitsphereRentalQueue.consume(async (payload) => {
+await orbitsphereRentalConsumer.consume(async (payload) => {
   logger.info("Processing rental payload", payload);
   /// Creating AWS instance
   const instance = await orbitsphereAWS.launch(payload);

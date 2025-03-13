@@ -6,7 +6,7 @@ import {
   logger,
   orbitsphere,
   orbitSphereDatabase,
-  orbitsphereRentalQueue,
+  orbitsphereRentalEventProducer,
 } from "@/configs/clients";
 
 await orbitsphere.onOrbitSphereInstanceRented(
@@ -35,7 +35,7 @@ await orbitsphere.onOrbitSphereInstanceRented(
       });
 
       /// Adding into Rental queue
-      await orbitsphereRentalQueue.publish({
+      await orbitsphereRentalEventProducer.publish({
         region,
         tenant,
         sshPublicKey,

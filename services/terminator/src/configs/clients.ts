@@ -5,6 +5,7 @@ import { OrbitSphereTerminationQueue } from "@orbitsphere/queues";
 import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 /// Local imports
 import { environment } from "./environments";
+import { TerminationMessageConsumer } from "@orbitsphere/broker";
 
 /// Logger
 export const logger = createOrbitSphereLogger("events");
@@ -21,7 +22,9 @@ export const orbitsphereAWS = new OrbitSphereAWSInstance(
 );
 
 /// Queues
-export const orbitSphereTerminationQueue = new OrbitSphereTerminationQueue();
-await orbitSphereTerminationQueue.initialize(
-  environment.RABBITMQ_CONNECTION_URL
+export const orbitSphereTerminationConsumer = new TerminationMessageConsumer(
+  "@orbitsphere-terminator",
+  [environment.KAFKA_CONNECTION_URL],
+  "terminator-group-1"
 );
+await orbitSphereTerminationConsumer.connect();

@@ -5,7 +5,7 @@ import {
   logger,
   orbitsphere,
   orbitSphereDatabase,
-  orbitSphereTerminationQueue,
+  orbitSphereTerminationEventProducer,
 } from "@/configs/clients";
 
 await orbitsphere.onOrbitSphereInstanceTerminated(
@@ -21,7 +21,7 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
         instanceId: instance?.instanceId,
       });
 
-      await orbitSphereTerminationQueue.publish({
+      await orbitSphereTerminationEventProducer.publish({
         region: instance?.region!.value,
         instanceId: instance?.instanceId!,
         actualCost: actualCost.toString(),
