@@ -2,6 +2,7 @@
 /** @notice Library imports */
 import { toast } from "sonner";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { RiLoader4Line } from "react-icons/ri";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
@@ -19,6 +20,7 @@ import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { ORBITSPHERE } from "@/constants";
 
 const Terminate = ({ sphereId }: { sphereId: bigint }) => {
+  const router = useRouter();
   /// States
   const [currentStatus, setCurrentStatus] = useState("");
   const [isTxnSuccess, setIsTxnSuccess] = useState(false);
@@ -111,7 +113,12 @@ const Terminate = ({ sphereId }: { sphereId: bigint }) => {
               type="button"
               variant="secondary"
               className="cursor-pointer"
-              onClick={() => setIsDialogOpen(() => false)}
+              onClick={() =>
+                setTimeout(() => {
+                  setIsDialogOpen(() => false);
+                  router.replace("/dashboard");
+                }, 1000)
+              }
             >
               Done
             </Button>
