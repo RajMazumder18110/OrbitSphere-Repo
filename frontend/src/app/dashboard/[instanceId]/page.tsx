@@ -45,6 +45,7 @@ import Terminate from "./Terminate";
 import ServerNotFoundImage from "@/assets/not-found.svg";
 import { getInstanceByInstanceId } from "@/actions/database/instanceServices";
 import { formatUnits } from "viem";
+import InstanceStatus from "./InstanceStatus";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -143,6 +144,12 @@ const SingleInstanceDetails = async ({
                   ? instance.terminatedOn!.toString()
                   : instance.willBeEndOn.toString()}
               </h1>
+              {instance.status === "RUNNING" && (
+                <InstanceStatus
+                  instanceId={instance.instanceId}
+                  region={instance.region.value}
+                />
+              )}
             </div>
             <div className="flex items-center gap-3">
               <Badge className="text-xs font-semibold dark rounded-full">
