@@ -47,7 +47,10 @@ export const getInstancesByStatus = async (params: {
     whereCondition = and(
       or(
         eq(instancesTable.status, InstanceStatus.QUEUED),
-        lte(instancesTable.willBeEndOn, sql`now()`)
+        and(
+          eq(instancesTable.status, InstanceStatus.RUNNING),
+          lte(instancesTable.willBeEndOn, sql`now()`)
+        )
       ),
       eq(instancesTable.tenant, params.address.toLowerCase())
     );
