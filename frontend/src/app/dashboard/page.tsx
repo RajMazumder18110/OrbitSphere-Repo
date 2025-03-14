@@ -14,8 +14,8 @@ import { Input } from "@/components/ui/input";
 import Authentication from "./Authentication";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getIsAuthenticated } from "@/actions/authentication";
-import { getInstancesByStatus } from "@/actions/database/instanceServices";
 import { InstanceStatus } from "@orbitsphere/database/schemas";
+import { getInstancesByStatusWithServerAction } from "@/actions/database";
 
 /// DashboardLayout props
 type DashboardPageProps = {
@@ -39,7 +39,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
     redirect("/dashboard?tab=running");
   }
   /// Grabbing instances
-  const instances = await getInstancesByStatus({
+  const instances = await getInstancesByStatusWithServerAction({
     address: authenticatedUser.address,
     status: tab.toUpperCase() as InstanceStatus,
   });

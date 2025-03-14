@@ -1,5 +1,10 @@
 "use server";
 
+/// Server action type
+export type ServerActionResult<T> =
+  | { success: true; value: T }
+  | { success: false; error: Error | unknown };
+
 export interface UtilizationData {
   time: string;
   percentCpu: number;

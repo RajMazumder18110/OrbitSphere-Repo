@@ -43,9 +43,9 @@ import {
 import CopyButton from "@/components/CopyButton";
 import Terminate from "./Terminate";
 import ServerNotFoundImage from "@/assets/not-found.svg";
-import { getInstanceByInstanceId } from "@/actions/database/instanceServices";
 import { formatUnits } from "viem";
 import InstanceStatus from "./InstanceStatus";
+import { getSphereByInstanceIdWithServerAction } from "@/actions/database";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -59,7 +59,7 @@ const SingleInstanceDetails = async ({
 }: SingleInstanceDetailsProps) => {
   const { instanceId } = await params;
   /// Grabbing data from database
-  const instance = await getInstanceByInstanceId(instanceId);
+  const instance = await getSphereByInstanceIdWithServerAction(instanceId);
 
   /** @notice Incase if instance not found with id */
   if (!instance) {

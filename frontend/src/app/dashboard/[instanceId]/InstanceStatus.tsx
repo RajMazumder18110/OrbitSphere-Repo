@@ -1,17 +1,18 @@
 "use client";
 /** @notice Library imports */
-import { MdError } from "react-icons/md";
 import { useEffect, useState } from "react";
+/// Icons
+import { MdError } from "react-icons/md";
 import { PiSpinnerBold } from "react-icons/pi";
 import { FaCircleCheck } from "react-icons/fa6";
 /// Local imports
-import { getInstanceStatus } from "@/actions/aws/instanceDetails";
 import {
   TooltipProvider,
   Tooltip,
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import { getSphereStatusWithServerAction } from "@/actions/aws";
 
 type InstanceStatusProps = {
   region: string;
@@ -27,7 +28,7 @@ const InstanceStatus = ({ instanceId, region }: InstanceStatusProps) => {
     setIsSuccess(false);
     setIsError(false);
 
-    getInstanceStatus(instanceId, region)
+    getSphereStatusWithServerAction({ instanceId, region })
       .then((data) => {
         /// If there is no data
         if (!data) {

@@ -1,14 +1,16 @@
 /** @notice Library imports */
 /// Local imports
+import {
+  getAllRegionsWithServerAction,
+  getAllSpheresWithServerAction,
+} from "@/actions/database";
 import LaunchInstanceForm from "./LaunchForm";
 import RainbowkitProvider from "@/providers/RainbowkitProvider";
-import { getAllRegions } from "@/actions/database/regionServices";
-import { getAllSpheres } from "@/actions/database/sphereServices";
 
 const LaunchInstancePage = async () => {
   /// Grabbing instance & region details
-  const regions = await getAllRegions();
-  const instances = await getAllSpheres();
+  const regions = await getAllRegionsWithServerAction();
+  const instances = await getAllSpheresWithServerAction();
 
   return (
     <RainbowkitProvider>
