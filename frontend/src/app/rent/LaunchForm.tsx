@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { toast } from "sonner";
 import { erc20Abi, formatUnits, Hex } from "viem";
+import { orbitSphereAbi } from "@orbitsphere/blockchain";
 import { useState } from "react";
 import { FaCheck, FaRegClock } from "react-icons/fa6";
 import { TbServer2 } from "react-icons/tb";
@@ -41,7 +42,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { minifyAddress } from "@/lib/utils";
-import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ORBITSPHERE, USDC } from "@/constants";
 import { NormalConnectButton } from "@/components/ConnectButton";

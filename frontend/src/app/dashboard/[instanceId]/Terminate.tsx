@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RiLoader4Line } from "react-icons/ri";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { orbitSphereAbi } from "@orbitsphere/blockchain";
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 /// Local imports
 import {
@@ -16,7 +17,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { orbitSphereAbi } from "@/constants/orbitSphereAbi";
 import { ORBITSPHERE } from "@/constants";
 
 const Terminate = ({ sphereId }: { sphereId: bigint }) => {
