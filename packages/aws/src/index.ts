@@ -23,6 +23,7 @@ import {
   getCustomSSHKeySetupCommand,
 } from "./utils";
 import type { LaunchInstanceParams, RunningInstanceParams } from "./types";
+export * from "./types";
 
 class OrbitSphereAWSInstance {
   constructor(private accessKeyId: string, private secretAccessKey: string) {}
