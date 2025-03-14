@@ -1,5 +1,5 @@
 /** @notice library imports */
-import { and, eq, gt, lte, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, gt, lte, or, sql } from "drizzle-orm";
 /// Local imports
 import {
   instancesTable,
@@ -38,12 +38,18 @@ export class OrbitSphereInstanceHandler {
   public async getInstancesByStatus(params: PaginatedGetInstanceParams) {
     /// Where condition
     let whereCondition;
+    /// Order condition
+    let orderBy;
     if (params.status === InstanceStatus.TERMINATED) {
+      /// Where condition
       whereCondition = and(
         eq(instancesTable.status, params.status),
         eq(instancesTable.tenant, params.address.toLowerCase())
       );
+      /// Order condition
+      orderBy = desc(instancesTable.terminatedOn);
     } else if (params.status === InstanceStatus.QUEUED) {
+      /// Where condition
       whereCondition = and(
         or(
           eq(instancesTable.status, InstanceStatus.QUEUED),
@@ -54,27 +60,50 @@ export class OrbitSphereInstanceHandler {
         ),
         eq(instancesTable.tenant, params.address.toLowerCase())
       );
+      /// Order condition
+      orderBy = asc(instancesTable.willBeEndOn);
     } else {
+      /// Where condition
       whereCondition = and(
         eq(instancesTable.status, InstanceStatus.RUNNING),
         gt(instancesTable.willBeEndOn, sql`now()`),
         eq(instancesTable.tenant, params.address.toLowerCase())
       );
+      /// Order condition
+      orderBy = asc(instancesTable.rentedOn);
     }
 
     /// Pagination
-    const limit = (params.limit ?? 8) >= 8 ? 8 : params.limit;
+    const limit = 8;
     const offset = ((params.page ?? 1) - 1) * limit!;
 
-    return this.connection.query.instancesTable.findMany({
-      offset,
-      limit,
-      with: {
-        sphere: true,
-        region: true,
-        tenant: true,
-      },
-      where: whereCondition,
+    return this.connection.transaction(async (tx) => {
+      /// Grabbing count
+      const [{ count: noOfRecords }] = await tx
+        .select({ count: count() })
+        .from(instancesTable)
+        .where(whereCondition);
+
+      const instances = await tx.query.instancesTable.findMany({
+        offset,
+        limit,
+        with: {
+          sphere: true,
+          region: true,
+          tenant: true,
+        },
+        orderBy,
+        where: whereCondition,
+      });
+
+      return {
+        instances,
+        metadata: {
+          noOfRecords,
+          totalPages: Math.ceil(noOfRecords / limit),
+          hasNextPge: offset + limit < noOfRecords,
+        },
+      };
     });
   }
 
