@@ -8,6 +8,7 @@ import {
   type TerminateInstanceParams,
 } from "../schemas";
 import type { DBType } from "./OrbitSphereBase";
+import type { PaginatedGetInstanceParams } from "../types";
 
 export class OrbitSphereInstanceHandler {
   constructor(private connection: DBType) {}
@@ -34,30 +35,36 @@ export class OrbitSphereInstanceHandler {
     });
   }
 
-  public async getInstancesByStatus(params: {
-    page?: number;
-    limit?: number;
-    status: InstanceStatus;
-  }) {
+  public async getInstancesByStatus(params: PaginatedGetInstanceParams) {
     /// Where condition
     let whereCondition;
     if (params.status === InstanceStatus.TERMINATED) {
-      whereCondition = eq(instancesTable.status, params.status);
+      whereCondition = and(
+        eq(instancesTable.status, params.status),
+        eq(instancesTable.tenant, params.address.toLowerCase())
+      );
     } else if (params.status === InstanceStatus.QUEUED) {
-      whereCondition = or(
-        eq(instancesTable.status, InstanceStatus.QUEUED),
-        lte(instancesTable.willBeEndOn, sql`now()`)
+      whereCondition = and(
+        or(
+          eq(instancesTable.status, InstanceStatus.QUEUED),
+          and(
+            eq(instancesTable.status, InstanceStatus.RUNNING),
+            lte(instancesTable.willBeEndOn, sql`now()`)
+          )
+        ),
+        eq(instancesTable.tenant, params.address.toLowerCase())
       );
     } else {
       whereCondition = and(
         eq(instancesTable.status, InstanceStatus.RUNNING),
-        gt(instancesTable.willBeEndOn, sql`now()`)
+        gt(instancesTable.willBeEndOn, sql`now()`),
+        eq(instancesTable.tenant, params.address.toLowerCase())
       );
     }
 
     /// Pagination
     const limit = (params.limit ?? 8) >= 8 ? 8 : params.limit;
-    const offset = ((params.page ?? 0) - 1) * limit!;
+    const offset = ((params.page ?? 1) - 1) * limit!;
 
     return this.connection.query.instancesTable.findMany({
       offset,
