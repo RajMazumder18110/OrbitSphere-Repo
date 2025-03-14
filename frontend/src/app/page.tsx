@@ -17,11 +17,11 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Navbar from "@/components/Navbar";
 import OrbitSphereIcon from "@/assets/orbitsphere.svg";
 import Image from "next/image";
-import { getAllSpheres } from "@/actions/database/sphereServices";
 import { formatUnits } from "viem";
+import { getAllSpheresWithServerAction } from "@/actions/database";
 
 export default async function Home() {
-  const instances = await getAllSpheres();
+  const instances = await getAllSpheresWithServerAction();
 
   return (
     <>
