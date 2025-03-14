@@ -15,8 +15,8 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@orbitsphere/blockchain": "workspace:*",
     "@orbitsphere/database": "workspace:*",
-    "@orbitsphere/orbiter": "workspace:*",
     "@orbitsphere/broker": "workspace:*",
     "@orbitsphere/logger": "workspace:*"
   }

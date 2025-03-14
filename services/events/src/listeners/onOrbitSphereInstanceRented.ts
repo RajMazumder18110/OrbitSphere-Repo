@@ -1,5 +1,5 @@
 /** @notice Library imports */
-import { fromBytes, fromBytes32 } from "@orbitsphere/orbiter";
+import { fromBytes, fromBytes32 } from "@orbitsphere/blockchain";
 import type { CreateRentalLogParams } from "@orbitsphere/database/schemas";
 /// Local imports
 import {

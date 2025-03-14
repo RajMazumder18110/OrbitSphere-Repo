@@ -1,5 +1,5 @@
 {
-  "name": "@orbitsphere/orbiter",
+  "name": "@orbitsphere/blockchain",
   "module": "index.ts",
   "type": "module",
   "private": true,
