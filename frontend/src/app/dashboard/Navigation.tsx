@@ -9,13 +9,17 @@ import {
   NavigationMenuLink,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { OrbitSphereRoutes } from "@/constants";
 
 const Navigation = () => {
   return (
     <NavigationMenu className="dark">
       <NavigationMenuList className="py-1 px-2 border-gray border rounded-lg">
         <NavigationMenuItem className="cursor-pointer">
-          <Link href="/dashboard?tab=running" legacyBehavior>
+          <Link
+            href={`${OrbitSphereRoutes.DASHBOARD}?tab=running`}
+            legacyBehavior
+          >
             <NavigationMenuLink
               tabName="running"
               className={`${navigationMenuTriggerStyle()} text-muted-foreground`}
@@ -26,7 +30,10 @@ const Navigation = () => {
         </NavigationMenuItem>
 
         <NavigationMenuItem className="cursor-pointer">
-          <Link href="/dashboard?tab=queued" legacyBehavior>
+          <Link
+            href={`${OrbitSphereRoutes.DASHBOARD}?tab=queued`}
+            legacyBehavior
+          >
             <NavigationMenuLink
               tabName="queued"
               className={`${navigationMenuTriggerStyle()} text-muted-foreground`}
@@ -37,7 +44,10 @@ const Navigation = () => {
         </NavigationMenuItem>
 
         <NavigationMenuItem className="cursor-pointer">
-          <Link href="/dashboard?tab=terminated" legacyBehavior>
+          <Link
+            href={`${OrbitSphereRoutes.DASHBOARD}?tab=terminated`}
+            legacyBehavior
+          >
             <NavigationMenuLink
               tabName="terminated"
               className={`${navigationMenuTriggerStyle()} text-muted-foreground`}

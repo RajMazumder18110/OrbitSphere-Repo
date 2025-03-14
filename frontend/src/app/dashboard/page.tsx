@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Search } from "lucide-react";
 import { redirect } from "next/navigation";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
+import { InstanceStatus } from "@orbitsphere/database/schemas";
 /// Local imports
 import {
   Card,
@@ -10,16 +10,16 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import Navigation from "./Navigation";
-import { Input } from "@/components/ui/input";
 import Authentication from "./Authentication";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getIsAuthenticated } from "@/actions/authentication";
-import { InstanceStatus } from "@orbitsphere/database/schemas";
 import { getInstancesByStatusWithServerAction } from "@/actions/database";
+import { Button } from "@/components/ui/button";
+import { OrbitSphereRoutes } from "@/constants";
 
 /// DashboardLayout props
 type DashboardPageProps = {
-  searchParams: Promise<{ tab: string }>;
+  searchParams: Promise<{ tab?: string; page?: string }>;
 };
 
 /// Active tabs
@@ -32,17 +32,52 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
     return <Authentication />;
   }
 
-  const params = await searchParams;
-  const tab = params.tab;
-  /// If tab not found or any random tab
-  if (!tab || !tabs.includes(tab)) {
-    redirect("/dashboard?tab=running");
+  /// Parsing search params
+  let needsRedirect = false;
+  const searchParamsParsed = await searchParams;
+  const allParams = new URLSearchParams(searchParamsParsed);
+  console.log(allParams);
+
+  /// Handling `tab` param
+  const currentTab = allParams.get("tab");
+  if (!currentTab || !tabs.includes(currentTab)) {
+    allParams.set("tab", "running");
+    needsRedirect = true;
   }
+
+  /// Handling `page` param
+  const currentPage = Number(allParams.get("page"));
+  if (!allParams.has("page") || isNaN(currentPage) || currentPage < 1) {
+    allParams.set("page", "1");
+    needsRedirect = true;
+  }
+
+  /// Redirect only if params were modified
+  if (needsRedirect) {
+    redirect(`${OrbitSphereRoutes.DASHBOARD}?${allParams.toString()}`);
+  }
+
   /// Grabbing instances
-  const instances = await getInstancesByStatusWithServerAction({
+  const { instances, metadata } = await getInstancesByStatusWithServerAction({
+    page: currentPage!,
     address: authenticatedUser.address,
-    status: tab.toUpperCase() as InstanceStatus,
+    status: currentTab!.toUpperCase() as InstanceStatus,
   });
+
+  /// If current page overflow
+  if (Boolean(metadata.noOfRecords) && currentPage > metadata.totalPages) {
+    allParams.set("page", "1");
+    redirect(`${OrbitSphereRoutes.DASHBOARD}?${allParams.toString()}`);
+  }
+
+  // Create new URLSearchParams for links to avoid modifying `allParams`
+  /// Next page params
+  const nextParams = new URLSearchParams(allParams);
+  nextParams.set("page", (currentPage + 1).toString());
+
+  /// Previous page params
+  const prevParams = new URLSearchParams(allParams);
+  prevParams.set("page", Math.max(1, currentPage - 1).toString());
 
   return (
     <main className="w-full grow flex flex-col gap-7 mt-5">
@@ -55,16 +90,31 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
 
       <div className="w-full flex items-center justify-between">
         <Navigation />
-        <div className="relative w-full max-w-40">
-          <Input
-            type="text"
-            placeholder="Search sphere"
-            className="pl-10 dark"
-          />
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            size={18}
-          />
+        <div className="flex items-center justify-center">
+          <Button
+            variant="link"
+            disabled={currentPage === 1}
+            asChild={currentPage !== 1}
+            className="dark cursor-pointer disabled:text-muted-foreground"
+          >
+            <Link
+              href={`${OrbitSphereRoutes.DASHBOARD}?${prevParams.toString()}`}
+            >
+              Prev
+            </Link>
+          </Button>
+          <Button
+            variant="link"
+            disabled={!metadata.hasNextPge}
+            asChild={metadata.hasNextPge}
+            className="dark cursor-pointer disabled:text-muted-foreground"
+          >
+            <Link
+              href={`${OrbitSphereRoutes.DASHBOARD}?${nextParams.toString()}`}
+            >
+              Next
+            </Link>
+          </Button>
         </div>
       </div>
 
@@ -78,7 +128,7 @@ const Dashboard = async ({ searchParams }: DashboardPageProps) => {
       <section className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4">
         {instances.map((instance) => (
           <Link
-            href={`/dashboard/${instance.instanceId}`}
+            href={`${OrbitSphereRoutes.DASHBOARD}/${instance.instanceId}`}
             key={instance.instanceId}
           >
             <Card className="dark relative hover:border-gray-400 ease-in-out transition-all flex flex-col items-center gap-4">

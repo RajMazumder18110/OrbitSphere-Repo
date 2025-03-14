@@ -2,7 +2,7 @@
 import { ReactNode } from "react";
 /// Local imports
 import Footer from "@/components/Footer";
-import DashboardNavbar from "./DashboardNavbar";
+import DashboardNavbar from "@/components/DashboardNavbar";
 import RainbowkitProviderComponent from "@/providers/RainbowkitProvider";
 
 /// DashboardLayout props
