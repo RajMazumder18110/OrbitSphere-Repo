@@ -1,8 +1,12 @@
 import { twMerge } from "tailwind-merge";
 import { formatUnits, padHex, stringToHex } from "viem";
 import { clsx, type ClassValue } from "clsx";
-import { IInstance } from "@/actions/database/instanceServices";
-// import { Instance } from "@/actions";
+import { Instance, Region, Sphere } from "@orbitsphere/database/schemas";
+
+type IInstance = Instance & {
+  region: string & Region;
+  sphere: string & Sphere;
+};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
