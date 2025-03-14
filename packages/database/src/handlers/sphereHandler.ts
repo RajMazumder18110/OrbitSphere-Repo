@@ -8,9 +8,7 @@ export class OrbitSphereSpheresHandler {
   constructor(private connection: DBType) {}
 
   public async getActiveSpheres() {
-    return this.connection.query.spheresTable.findMany({
-      where: eq(spheresTable.isEnabled, true),
-    });
+    return this.connection.query.spheresTable.findMany();
   }
 
   public async create(data: CreateSphereParams) {
