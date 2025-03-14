@@ -6,10 +6,8 @@ import {
   DescribeInstanceStatusCommandInput,
   InstanceStatus,
 } from "@aws-sdk/client-ec2";
-
-/// Access keys
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID!;
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY!;
+/// Local imports
+import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } from "@/constants";
 
 /// Get instance state
 export const getInstanceStatus = async (
@@ -21,8 +19,8 @@ export const getInstanceStatus = async (
     const client = new EC2Client({
       region: region,
       credentials: {
-        accessKeyId,
-        secretAccessKey,
+        accessKeyId: AWS_ACCESS_KEY_ID,
+        secretAccessKey: AWS_SECRET_ACCESS_KEY,
       },
     });
 

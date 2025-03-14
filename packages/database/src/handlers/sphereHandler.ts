@@ -2,7 +2,7 @@
 import { eq } from "drizzle-orm";
 /// Local imports
 import type { DBType } from "./OrbitSphereBase";
-import { spheresTable, type CreateSphereParams } from "@/schemas";
+import { spheresTable, type CreateSphereParams } from "../schemas";
 
 export class OrbitSphereSpheresHandler {
   constructor(private connection: DBType) {}

@@ -7,7 +7,7 @@ import {
   terminateLogsTable,
   type CreateRentalLogParams,
   type CreateTerminationLogParams,
-} from "@/schemas";
+} from "../schemas";
 import type { DBType } from "./OrbitSphereBase";
 
 export class OrbitSphereEventsHandler {

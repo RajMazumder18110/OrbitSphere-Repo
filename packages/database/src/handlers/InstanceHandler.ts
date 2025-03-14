@@ -6,7 +6,7 @@ import {
   InstanceStatus,
   type CreateInstanceParams,
   type TerminateInstanceParams,
-} from "@/schemas";
+} from "../schemas";
 import type { DBType } from "./OrbitSphereBase";
 
 export class OrbitSphereInstanceHandler {

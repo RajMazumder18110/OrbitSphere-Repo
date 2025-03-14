@@ -11,6 +11,7 @@ import {
 } from "@orbitsphere/database/schemas";
 /// Local imports
 import { database } from "./database";
+import { DEFAULT_PAGE_LIMIT } from "@/constants";
 
 /// Types
 export type IInstance = Instance & {
@@ -63,7 +64,10 @@ export const getInstancesByStatus = async (params: {
   }
 
   /// Pagination
-  const limit = (params.limit ?? 8) >= 8 ? 8 : params.limit;
+  const limit =
+    (params.limit ?? DEFAULT_PAGE_LIMIT) >= DEFAULT_PAGE_LIMIT
+      ? DEFAULT_PAGE_LIMIT
+      : params.limit;
   const offset = ((params.page ?? 1) - 1) * limit!;
 
   return database.query.instancesTable.findMany({
