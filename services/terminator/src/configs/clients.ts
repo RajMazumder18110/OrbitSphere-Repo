@@ -1,7 +1,6 @@
 /** @notice Library imports */
 import OrbitSphereAWSInstance from "@orbitsphere/aws";
 import { createOrbitSphereLogger } from "@orbitsphere/logger";
-import { OrbitSphereTerminationQueue } from "@orbitsphere/queues";
 import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 /// Local imports
 import { environment } from "./environments";
@@ -12,7 +11,7 @@ export const logger = createOrbitSphereLogger("events");
 
 /// Database
 export const orbitSphereDatabase = new OrbitSphereDatabase(
-  OrbitSphereDatabase.databaseUrl
+  environment.DATABASE_CONNECTION_URL
 );
 
 /// AWS

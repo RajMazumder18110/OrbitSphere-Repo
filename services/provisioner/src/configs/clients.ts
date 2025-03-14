@@ -11,7 +11,7 @@ export const logger = createOrbitSphereLogger("events");
 
 /// Database
 export const orbitSphereDatabase = new OrbitSphereDatabase(
-  OrbitSphereDatabase.databaseUrl
+  environment.DATABASE_CONNECTION_URL
 );
 
 /// AWS

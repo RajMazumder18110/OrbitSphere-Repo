@@ -1,5 +1,5 @@
 /** @notice Library imports */
-import { OrbitSphere } from "@orbitsphere/orbiter";
+import { OrbitSphere } from "@orbitsphere/blockchain";
 import { createOrbitSphereLogger } from "@orbitsphere/logger";
 import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 import {
@@ -20,7 +20,7 @@ export const orbitsphere = new OrbitSphere(
 
 /// Handlers
 export const orbitSphereDatabase = new OrbitSphereDatabase(
-  OrbitSphereDatabase.databaseUrl
+  environment.DATABASE_CONNECTION_URL
 );
 
 /// Messaging brokers

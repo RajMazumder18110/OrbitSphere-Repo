@@ -1,12 +1,10 @@
 /// Type
 type Environments = {
-  POSTGRES_DB: string;
-  POSTGRES_USER: string;
-  POSTGRES_HOST: string;
-  POSTGRES_PORT: string;
-  POSTGRES_PASSWORD: string;
+  /// Blockchain
   ORBIT_SPHERE_CONTRACT: string;
   BLOCKCHAIN_RPC_ENDPOINT: string;
+  /// Application
+  DATABASE_CONNECTION_URL: string;
   KAFKA_CONNECTION_URL: string;
 };
 
