@@ -16,8 +16,8 @@ import {
   AWSImageIds,
   AWSSecurityGroups,
   getCustomSSHKeySetupCommand,
-} from "@/utils";
-import type { LaunchInstanceParams, RunningInstanceParams } from "@/types";
+} from "./utils";
+import type { LaunchInstanceParams, RunningInstanceParams } from "./types";
 
 class OrbitSphereAWSInstance {
   constructor(private accessKeyId: string, private secretAccessKey: string) {}

@@ -4,8 +4,8 @@ import { Kafka, type Consumer } from "kafkajs";
 import {
   type RentalEventPayload,
   type IRentalMessageConsumer,
-} from "@/interfaces";
-import { OrbitSphereTopics } from "@/constants";
+} from "../../interfaces";
+import { OrbitSphereTopics } from "../../constants";
 
 export class RentalMessageConsumer implements IRentalMessageConsumer {
   /// Holders

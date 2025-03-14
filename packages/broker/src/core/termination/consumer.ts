@@ -4,8 +4,8 @@ import { Kafka, type Consumer } from "kafkajs";
 import {
   type TerminateEventPayload,
   type ITerminateMessageConsumer,
-} from "@/interfaces";
-import { OrbitSphereTopics } from "@/constants";
+} from "../../interfaces";
+import { OrbitSphereTopics } from "../../constants";
 
 export class TerminationMessageConsumer implements ITerminateMessageConsumer {
   /// Holders

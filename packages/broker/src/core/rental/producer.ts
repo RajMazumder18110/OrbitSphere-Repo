@@ -4,8 +4,8 @@ import { Kafka, type Producer } from "kafkajs";
 import {
   type RentalEventPayload,
   type IRentalMessageProducer,
-} from "@/interfaces";
-import { OrbitSphereTopics } from "@/constants";
+} from "../../interfaces";
+import { OrbitSphereTopics } from "../../constants";
 
 export class RentalMessageProducer implements IRentalMessageProducer {
   /// Holders

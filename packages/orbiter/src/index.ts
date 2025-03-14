@@ -7,8 +7,8 @@ import {
   type ContractEventPayload,
 } from "ethers";
 /// Local imports
-import orbitSphereAbi from "@/orbitSphereAbi";
-import { OrbitSphereEvents } from "@/constants";
+import orbitSphereAbi from "./orbitSphereAbi";
+import { OrbitSphereEvents } from "./constants";
 
 class OrbitSphere {
   private orbitSphere: Contract;
