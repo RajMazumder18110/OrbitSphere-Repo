@@ -6,10 +6,15 @@ import {
   StopInstancesCommand,
   DescribeInstancesCommand,
   TerminateInstancesCommand,
+  DescribeInstanceStatusCommand,
   type Instance,
+  type InstanceStatus,
   type RunInstancesCommandInput,
   type StopInstancesCommandInput,
+  type StopInstancesCommandOutput,
   type TerminateInstancesCommandInput,
+  type TerminateInstancesCommandOutput,
+  type DescribeInstanceStatusCommandInput,
 } from "@aws-sdk/client-ec2";
 /// Local imports
 import {
@@ -22,29 +27,33 @@ import type { LaunchInstanceParams, RunningInstanceParams } from "./types";
 class OrbitSphereAWSInstance {
   constructor(private accessKeyId: string, private secretAccessKey: string) {}
 
-  private async wait(client: EC2Client, instanceId: string): Promise<Instance> {
-    return new Promise(async (resolve, reject) => {
-      while (true) {
-        const describeCommand = new DescribeInstancesCommand({
-          InstanceIds: [instanceId],
+  public async getInstanceStatus(
+    data: RunningInstanceParams
+  ): Promise<InstanceStatus | undefined> {
+    return new Promise((resolve, reject) => {
+      /// Initializing instance
+      const client = new EC2Client({
+        region: data.region,
+        credentials: {
+          accessKeyId: this.accessKeyId,
+          secretAccessKey: this.secretAccessKey,
+        },
+      });
+
+      /// Input
+      const params: DescribeInstanceStatusCommandInput = {
+        InstanceIds: [data.instanceId],
+      };
+
+      client
+        .send(new DescribeInstanceStatusCommand(params))
+        .then((response) => {
+          const instanceStatus = response.InstanceStatuses?.at(0);
+          resolve(instanceStatus);
+        })
+        .catch((err) => {
+          reject(err);
         });
-
-        try {
-          const describeResponse = await client.send(describeCommand);
-          const instance =
-            describeResponse.Reservations?.at(0)?.Instances?.at(0);
-          const publicIp = instance?.PublicIpAddress;
-
-          if (publicIp) {
-            return resolve(instance);
-          }
-        } catch (error) {
-          return reject(error);
-        }
-
-        // Wait 10 seconds before retrying
-        await new Promise((res) => setTimeout(res, 10000));
-      }
     });
   }
 
@@ -87,40 +96,84 @@ class OrbitSphereAWSInstance {
     });
   }
 
-  public async terminate(data: RunningInstanceParams) {
-    /// Initializing instance
-    const client = new EC2Client({
-      region: data.region,
-      credentials: {
-        accessKeyId: this.accessKeyId,
-        secretAccessKey: this.secretAccessKey,
-      },
-    });
-    /// Preparing data
-    const params: TerminateInstancesCommandInput = {
-      InstanceIds: [data.instanceId],
-    };
+  public async terminate(
+    data: RunningInstanceParams
+  ): Promise<TerminateInstancesCommandOutput> {
+    return new Promise((resolve, reject) => {
+      /// Initializing instance
+      const client = new EC2Client({
+        region: data.region,
+        credentials: {
+          accessKeyId: this.accessKeyId,
+          secretAccessKey: this.secretAccessKey,
+        },
+      });
+      /// Preparing data
+      const params: TerminateInstancesCommandInput = {
+        InstanceIds: [data.instanceId],
+      };
 
-    /// Terminating instance
-    return await client.send(new TerminateInstancesCommand(params));
+      /// Terminating instance
+      client
+        .send(new TerminateInstancesCommand(params))
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => reject(err));
+    });
   }
 
-  public async stop(data: RunningInstanceParams) {
-    /// Initializing instance
-    const client = new EC2Client({
-      region: data.region,
-      credentials: {
-        accessKeyId: this.accessKeyId,
-        secretAccessKey: this.secretAccessKey,
-      },
-    });
-    /// Preparing data
-    const params: StopInstancesCommandInput = {
-      InstanceIds: [data.instanceId],
-    };
+  public async stop(
+    data: RunningInstanceParams
+  ): Promise<StopInstancesCommandOutput> {
+    return new Promise((resolve, reject) => {
+      /// Initializing instance
+      const client = new EC2Client({
+        region: data.region,
+        credentials: {
+          accessKeyId: this.accessKeyId,
+          secretAccessKey: this.secretAccessKey,
+        },
+      });
+      /// Preparing data
+      const params: StopInstancesCommandInput = {
+        InstanceIds: [data.instanceId],
+      };
 
-    /// Terminating instance
-    return await client.send(new StopInstancesCommand(params));
+      client
+        .send(new StopInstancesCommand(params))
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
+  /// PRIVATE
+  private async wait(client: EC2Client, instanceId: string): Promise<Instance> {
+    return new Promise(async (resolve, reject) => {
+      while (true) {
+        const describeCommand = new DescribeInstancesCommand({
+          InstanceIds: [instanceId],
+        });
+
+        try {
+          const describeResponse = await client.send(describeCommand);
+          const instance =
+            describeResponse.Reservations?.at(0)?.Instances?.at(0);
+          const publicIp = instance?.PublicIpAddress;
+
+          if (publicIp) {
+            return resolve(instance);
+          }
+        } catch (error) {
+          return reject(error);
+        }
+
+        // Wait 10 seconds before retrying
+        await new Promise((res) => setTimeout(res, 10000));
+      }
+    });
   }
 }
 
