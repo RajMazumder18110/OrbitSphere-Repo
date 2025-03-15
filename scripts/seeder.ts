@@ -1,13 +1,12 @@
 /** @notice Library imports */
-import { toUtf8String } from "ethers";
-import { OrbitSphereDatabase } from "./packages/database/src/handlers/OrbitSphereBase";
+import { OrbitSphereDatabase } from "../packages/database/src/handlers/OrbitSphereBase";
 import type {
   CreateRegionParams,
   CreateSphereParams,
-} from "./packages/database/src/schemas";
+} from "@orbitsphere/database/schemas";
 
 const orbitSphereDatabase = new OrbitSphereDatabase(
-  OrbitSphereDatabase.databaseUrl
+  process.env.DATABASE_CONNECTION_URL
 );
 
 const regions = [
@@ -71,12 +70,12 @@ const spheres = [
   },
 ];
 
-// regions.forEach(async (region) => {
-//   await orbitSphereDatabase.regions.create(region satisfies CreateRegionParams);
-// });
+regions.forEach(async (region) => {
+  await orbitSphereDatabase.regions.create(region satisfies CreateRegionParams);
+});
 
-// spheres.forEach(async (spheres) => {
-//   await orbitSphereDatabase.spheres.create(
-//     spheres satisfies CreateSphereParams
-//   );
-// });
+spheres.forEach(async (spheres) => {
+  await orbitSphereDatabase.spheres.create(
+    spheres satisfies CreateSphereParams
+  );
+});
