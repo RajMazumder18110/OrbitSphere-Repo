@@ -18,6 +18,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@orbitsphere/blockchain": "workspace:*",
     "drizzle-orm": "^0.40.0",
     "pg": "^8.13.3"
   }

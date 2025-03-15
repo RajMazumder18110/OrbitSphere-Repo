@@ -52,7 +52,7 @@ await orbitsphere.onOrbitSphereInstanceRented(
 
       /// Recoding `OrbitSphereInstanceRented` into database
       const { blockNumber, transactionHash, data, topics } = payload.log;
-      await orbitSphereDatabase.events.recordRentalLog({
+      await orbitSphereDatabase.indexer.indexRentalEvent({
         /// Core
         region,
         sphereId,

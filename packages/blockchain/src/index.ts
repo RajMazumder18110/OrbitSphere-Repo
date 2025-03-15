@@ -4,6 +4,7 @@ import {
   toUtf8String,
   JsonRpcProvider,
   WebSocketProvider,
+  type EventLog,
   type ContractEventPayload,
 } from "ethers";
 /// Local imports
@@ -23,6 +24,14 @@ class OrbitSphere {
     }
     /// Initializing contract
     this.orbitSphere = new Contract(target, orbitSphereAbi, provider);
+  }
+
+  public async getLastBlockNumber() {
+    return this.orbitSphere.runner?.provider?.getBlockNumber()!;
+  }
+
+  public async forceTerminate(sphereId: string) {
+    console.log("FORCE TERMINATED", sphereId);
   }
 
   public onOrbitSphereInstanceRented(
@@ -53,6 +62,98 @@ class OrbitSphere {
   ) {
     return this.orbitSphere.on(OrbitSphereEvents.INSTANCE_TERMINATED, listener);
   }
+
+  public async filterOrbitSphereInstanceRented({
+    fromBlock,
+  }: {
+    fromBlock: number;
+  }) {
+    const filteredEvents = await this.orbitSphere.queryFilter(
+      OrbitSphereEvents.INSTANCE_RENTED,
+      fromBlock,
+      "latest"
+    );
+
+    const allEvents = filteredEvents.map((e) => {
+      /// Extracting blockchain data.
+      const { blockNumber, data, topics, transactionHash, args } =
+        e as EventLog;
+      /// Extracting event data
+      const [
+        region,
+        sphereId,
+        instanceType,
+        sshPublicKey,
+        rentedOn,
+        willBeEndOn,
+        tenant,
+        totalCost,
+      ] = args as unknown as [
+        string,
+        bigint,
+        string,
+        string,
+        bigint,
+        bigint,
+        string,
+        bigint
+      ];
+
+      return {
+        tenant,
+        sphereId,
+        rentedOn,
+        totalCost,
+        willBeEndOn,
+        region: fromBytes32(region),
+        sshPublicKey: fromBytes(sshPublicKey),
+        instanceType: fromBytes32(instanceType),
+        /// Blockchain
+        data,
+        topics,
+        transactionHash,
+        blockNumber: BigInt(blockNumber),
+      };
+    });
+
+    return allEvents;
+  }
+
+  public async filterOrbitSphereInstanceTerminated({
+    fromBlock,
+  }: {
+    fromBlock: number;
+  }) {
+    const filteredEvents = await this.orbitSphere.queryFilter(
+      OrbitSphereEvents.INSTANCE_TERMINATED,
+      fromBlock,
+      "latest"
+    );
+
+    const allEvents = filteredEvents.map((e) => {
+      /// Extracting blockchain data.
+      const { blockNumber, data, topics, transactionHash, args } =
+        e as EventLog;
+      /// Extracting event data
+      const [tenant, sphereId, actualCost, timeConsumed, refundAmount] =
+        args as unknown as [string, bigint, bigint, bigint, bigint];
+
+      return {
+        tenant,
+        sphereId,
+        actualCost,
+        timeConsumed,
+        refundAmount,
+        /// Blockchain
+        data,
+        topics,
+        transactionHash,
+        blockNumber: BigInt(blockNumber),
+      };
+    });
+
+    return allEvents;
+  }
 }
 
 const fromBytes32 = (value: string) => {
@@ -63,4 +164,10 @@ const fromBytes32 = (value: string) => {
 const fromBytes = (value: string) => toUtf8String(value);
 
 /** @notice Exports */
-export { OrbitSphere, orbitSphereAbi, fromBytes32, fromBytes };
+export {
+  OrbitSphere,
+  OrbitSphereEvents,
+  orbitSphereAbi,
+  fromBytes32,
+  fromBytes,
+};

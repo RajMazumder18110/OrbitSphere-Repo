@@ -6,9 +6,9 @@ import {
 } from "drizzle-orm/node-postgres";
 /// Loca imports
 import * as schema from "../schemas";
+import { OrbitSphereEventsIndexer } from "./indexer";
 import { OrbitSphereRegionsHandler } from "./regionHandler";
 import { OrbitSphereSpheresHandler } from "./sphereHandler";
-import { OrbitSphereEventsHandler } from "./EventLogsHandler";
 import { OrbitSphereInstanceHandler } from "./InstanceHandler";
 
 /// Exports
@@ -19,7 +19,7 @@ export type DBType = NodePgDatabase<typeof schema> & {
 export class OrbitSphereDatabase {
   protected connection: DBType;
 
-  public events: OrbitSphereEventsHandler;
+  public indexer: OrbitSphereEventsIndexer;
   public regions: OrbitSphereRegionsHandler;
   public spheres: OrbitSphereSpheresHandler;
   public instances: OrbitSphereInstanceHandler;
@@ -28,7 +28,7 @@ export class OrbitSphereDatabase {
     this.connection = drizzle(connectionUrl, { schema });
 
     /// Initializing handlers
-    this.events = new OrbitSphereEventsHandler(this.connection);
+    this.indexer = new OrbitSphereEventsIndexer(this.connection);
     this.regions = new OrbitSphereRegionsHandler(this.connection);
     this.spheres = new OrbitSphereSpheresHandler(this.connection);
     this.instances = new OrbitSphereInstanceHandler(this.connection);

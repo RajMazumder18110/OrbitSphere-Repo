@@ -36,7 +36,7 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
 
       /// Recoding `OrbitSphereInstanceTerminated` into database
       const { blockNumber, transactionHash, data, topics } = payload.log;
-      await orbitSphereDatabase.events.recordTerminationLog({
+      await orbitSphereDatabase.indexer.indexTerminationEvent({
         /// Core
         tenant,
         sphereId,

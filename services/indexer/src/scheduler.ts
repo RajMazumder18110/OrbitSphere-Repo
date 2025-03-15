@@ -1,0 +1,135 @@
+/** @notice Library imports */
+import scheduler from "node-schedule";
+import { OrbitSphereEvents } from "@orbitsphere/blockchain";
+import {
+  logger,
+  orbitsphere,
+  orbitSphereDatabase,
+  orbitsphereRentalEventProducer,
+  orbitSphereTerminationEventProducer,
+} from "./configs/clients";
+import { environment } from "./configs/environments";
+/// Local imports
+
+/// Index time
+const INDEX_SCHEDULER_ON = "* 10 * * * *"; // Every 10 minutes
+
+scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
+  try {
+    /// Grabbing last indexed block
+    const rentalIndex =
+      await orbitSphereDatabase.indexer.getIndexedRentalEvent();
+
+    /// Grabbing from block
+    const fromBlock = rentalIndex
+      ? Number(rentalIndex.blockNumber)
+      : Number(environment.ORBIT_SPHERE_CONTRACT_DEPLOYED_ON_BLOCK);
+
+    /// Grabbing latest block
+    const latestBlock = await orbitsphere.getLastBlockNumber();
+
+    const allEvents = await orbitsphere.filterOrbitSphereInstanceRented({
+      fromBlock,
+    });
+    /// if have some events
+    if (Boolean(allEvents.length)) {
+      /// Adding into Rental queue
+      const queuePayload = allEvents.map((e) => ({
+        region: e.region,
+        tenant: e.tenant,
+        sshPublicKey: e.sshPublicKey,
+        instanceType: e.instanceType,
+        sphereId: e.sphereId.toString(),
+        rentedOn: e.rentedOn.toString(),
+        totalCost: e.totalCost.toString(),
+        willBeEndOn: e.willBeEndOn.toString(),
+      }));
+      await orbitsphereRentalEventProducer.bulkPublish(queuePayload);
+      logger.info("[SCHEDULER] Successfully queued rental requests", {
+        length: allEvents.length,
+      });
+
+      /// Adding to database
+      await orbitSphereDatabase.indexer.indexRentalEvents(allEvents);
+      logger.info(
+        "[SCHEDULER] Successfully recorded rental request into database",
+        {
+          length: allEvents.length,
+        }
+      );
+    }
+    /// If no events found
+    else {
+      await orbitSphereDatabase.indexer.indexBlockNumber({
+        blockNumber: BigInt(latestBlock),
+        event: OrbitSphereEvents.INSTANCE_RENTED,
+      });
+    }
+
+    logger.info("Successfully schedule check");
+  } catch (error) {
+    logger.error("Schedule check failed", { error });
+  }
+});
+
+scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
+  try {
+    /// Grabbing last indexed block
+    const terminationIndex =
+      await orbitSphereDatabase.indexer.getIndexedTerminationEvent();
+
+    /// Grabbing from block
+    const fromBlock = terminationIndex
+      ? Number(terminationIndex.blockNumber)
+      : Number(environment.ORBIT_SPHERE_CONTRACT_DEPLOYED_ON_BLOCK);
+
+    /// Grabbing latest block
+    const latestBlock = await orbitsphere.getLastBlockNumber();
+
+    const allEvents = await orbitsphere.filterOrbitSphereInstanceTerminated({
+      fromBlock,
+    });
+    /// if have some events
+    if (Boolean(allEvents.length)) {
+      /// Adding into Rental queue
+      const queuePayload = allEvents.map(async (e) => {
+        const instance =
+          await orbitSphereDatabase.instances.getInstanceBySphereId(e.sphereId);
+        return {
+          sphereId: e.sphereId.toString(),
+          region: instance?.region!.value!,
+          instanceId: instance?.instanceId!,
+          actualCost: e.actualCost.toString(),
+          timeConsumed: e.timeConsumed.toString(),
+          refundAmount: e.refundAmount.toString(),
+        };
+      });
+
+      const allPayload = await Promise.all(queuePayload);
+      await orbitSphereTerminationEventProducer.bulkPublish(allPayload);
+      logger.info("[SCHEDULER] Successfully queued termination requests", {
+        length: allEvents.length,
+      });
+
+      /// Adding to database
+      await orbitSphereDatabase.indexer.indexTerminationEvents(allEvents);
+      logger.info(
+        "[SCHEDULER] Successfully recorded termination request into database",
+        {
+          length: allEvents.length,
+        }
+      );
+    }
+    /// If no events found
+    else {
+      await orbitSphereDatabase.indexer.indexBlockNumber({
+        blockNumber: BigInt(latestBlock),
+        event: OrbitSphereEvents.INSTANCE_TERMINATED,
+      });
+    }
+
+    logger.info("Successfully schedule check");
+  } catch (error) {
+    logger.error("Schedule check failed", { error });
+  }
+});

@@ -5,3 +5,4 @@ export * from "./terminateLogs";
 export * from "./instancesTable";
 export * from "./regionsTable";
 export * from "./spheresTable";
+export * from "./indexer";

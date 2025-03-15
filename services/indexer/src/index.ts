@@ -1,5 +1,6 @@
 /** @notice Local imports */
 import { logger } from "@/configs/clients";
+import "./scheduler";
 import "@/listeners/onOrbitSphereInstanceRented";
 import "@/listeners/onOrbitSphereInstanceTerminated";
 
