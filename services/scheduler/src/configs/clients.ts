@@ -25,11 +25,11 @@ export const orbitsphereContract = new OrbitSphere(
 export const terminationConsumer = new TerminationMessageConsumer(
   "@orbitsphere-termination-scheduler",
   [environment.KAFKA_CONNECTION_URL],
-  "termination-scheduler-group-1"
+  "T-termination-scheduler-group-1"
 );
 export const rentalConsumer = new RentalMessageConsumer(
   "@orbitsphere-termination-scheduler",
   [environment.KAFKA_CONNECTION_URL],
-  "termination-scheduler-group-1"
+  "R-termination-scheduler-group-1"
 );
 await rentalConsumer.connect();
