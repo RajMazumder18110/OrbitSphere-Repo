@@ -3,7 +3,7 @@ import { formatUnits, padHex, stringToHex } from "viem";
 import { clsx, type ClassValue } from "clsx";
 import { Instance, Region, Sphere } from "@orbitsphere/database/schemas";
 
-type IInstance = Instance & {
+export type IInstance = Instance & {
   region: string & Region;
   sphere: string & Sphere;
 };

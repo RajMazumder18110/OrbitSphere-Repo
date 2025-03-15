@@ -46,6 +46,9 @@ import ServerNotFoundImage from "@/assets/not-found.svg";
 import { formatUnits } from "viem";
 import InstanceStatus from "./InstanceStatus";
 import { getSphereByInstanceIdWithServerAction } from "@/actions/database";
+import TimeRemainingProgressbar from "./TimeRemainingProgressbar";
+import TimeRemainingCard from "./TimeRemainingCard";
+import USDCConsumedCard from "./USDCConsumedCard";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -98,7 +101,6 @@ const SingleInstanceDetails = async ({
   /// Calculating data
   const isTerminated = isInstanceTerminated(instance);
   const refundAmount = calculateRefundAmount(instance);
-  const completedPercentage = getCompletionPercentage(instance);
 
   return (
     <Dialog>
@@ -151,15 +153,7 @@ const SingleInstanceDetails = async ({
                 />
               )}
             </div>
-            <div className="flex items-center gap-3">
-              <Badge className="text-xs font-semibold dark rounded-full">
-                {completedPercentage}%
-              </Badge>
-              <Progress
-                value={completedPercentage}
-                className="w-full h-4 dark"
-              />
-            </div>
+            <TimeRemainingProgressbar instance={instance} />
           </section>
         </div>
 
@@ -179,29 +173,8 @@ const SingleInstanceDetails = async ({
               </div>
             </CardHeader>
           </Card>
-          <Card className="gap-1">
-            <CardHeader className="flex flex-col items-center gap-3">
-              <IoLogoUsd className="text-2xl" />
-              <div className="flex flex-col gap-1 items-center">
-                <CardTitle>Consumed</CardTitle>
-                <CardDescription>
-                  {(
-                    Number(formatUnits(instance.totalCost, 6)) - refundAmount
-                  ).toFixed(2)}{" "}
-                  USDC
-                </CardDescription>
-              </div>
-            </CardHeader>
-          </Card>
-          <Card className="gap-1">
-            <CardHeader className="flex flex-col items-center gap-3">
-              <TbClockPlay className="text-2xl" />
-              <div className="flex flex-col gap-1 items-center">
-                <CardTitle>Remaining</CardTitle>
-                <CardDescription>{getTimeRemaining(instance)}</CardDescription>
-              </div>
-            </CardHeader>
-          </Card>
+          <USDCConsumedCard instance={instance} />
+          <TimeRemainingCard instance={instance} />
           <Card className="gap-1">
             <CardHeader className="flex flex-col items-center gap-3">
               <FaLocationCrosshairs className="text-2xl" />
