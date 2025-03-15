@@ -3,11 +3,11 @@ import {
   RentalMessageConsumer,
   TerminationMessageConsumer,
 } from "@orbitsphere/broker";
+import { OrbitSphere } from "@orbitsphere/blockchain";
 import { createOrbitSphereLogger } from "@orbitsphere/logger";
+import { TerminationScheduler } from "@orbitsphere/scheduler";
 /// Local imports
 import { environment } from "./environments";
-import { TerminationScheduler } from "@orbitsphere/scheduler";
-import { OrbitSphere } from "@orbitsphere/blockchain";
 
 /// Logger
 export const logger = createOrbitSphereLogger("scheduler");
@@ -33,3 +33,4 @@ export const rentalConsumer = new RentalMessageConsumer(
   "R-termination-scheduler-group-1"
 );
 await rentalConsumer.connect();
+await terminationConsumer.connect();
