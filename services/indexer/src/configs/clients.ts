@@ -10,7 +10,7 @@ import {
 import { environment } from "./environments";
 
 /// Logger
-export const logger = createOrbitSphereLogger("events");
+export const logger = createOrbitSphereLogger("indexer");
 
 /// OrbitSphere contract
 export const orbitsphere = new OrbitSphere(
@@ -25,11 +25,11 @@ export const orbitSphereDatabase = new OrbitSphereDatabase(
 
 /// Messaging brokers
 export const orbitsphereRentalEventProducer = new RentalMessageProducer(
-  "@orbitsphere-events",
+  "@orbitsphere-indexer",
   [environment.KAFKA_CONNECTION_URL]
 );
 export const orbitSphereTerminationEventProducer =
-  new TerminationMessageProducer("@orbitsphere-events", [
+  new TerminationMessageProducer("@orbitsphere-indexer", [
     environment.KAFKA_CONNECTION_URL,
   ]);
 

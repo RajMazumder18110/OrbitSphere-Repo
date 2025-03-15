@@ -1,5 +1,5 @@
 {
-  "name": "@orbitsphere/events",
+  "name": "@orbitsphere/indexer",
   "type": "module",
   "main": "src/index.ts",
   "private": true,
