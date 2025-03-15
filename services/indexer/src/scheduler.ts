@@ -1,6 +1,7 @@
 /** @notice Library imports */
 import scheduler from "node-schedule";
 import { OrbitSphereEvents } from "@orbitsphere/blockchain";
+/// Local imports
 import {
   logger,
   orbitsphere,
@@ -9,10 +10,9 @@ import {
   orbitSphereTerminationEventProducer,
 } from "./configs/clients";
 import { environment } from "./configs/environments";
-/// Local imports
 
 /// Index time
-const INDEX_SCHEDULER_ON = "* 10 * * * *"; // Every 10 minutes
+const INDEX_SCHEDULER_ON = "*/5 * * * *"; // Every 5 minutes (on every 100 block)
 
 scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
   try {
@@ -21,9 +21,12 @@ scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
       await orbitSphereDatabase.indexer.getIndexedRentalEvent();
 
     /// Grabbing from block
-    const fromBlock = rentalIndex
-      ? Number(rentalIndex.blockNumber)
-      : Number(environment.ORBIT_SPHERE_CONTRACT_DEPLOYED_ON_BLOCK);
+    const fromBlock = (() => {
+      const source = rentalIndex
+        ? Number(rentalIndex.blockNumber)
+        : Number(environment.ORBIT_SPHERE_CONTRACT_DEPLOYED_ON_BLOCK);
+      return source + 1;
+    })();
 
     /// Grabbing latest block
     const latestBlock = await orbitsphere.getLastBlockNumber();
@@ -58,13 +61,11 @@ scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
         }
       );
     }
-    /// If no events found
-    else {
-      await orbitSphereDatabase.indexer.indexBlockNumber({
-        blockNumber: BigInt(latestBlock),
-        event: OrbitSphereEvents.INSTANCE_RENTED,
-      });
-    }
+    /// Update the latest block
+    await orbitSphereDatabase.indexer.indexBlockNumber({
+      blockNumber: BigInt(latestBlock),
+      event: OrbitSphereEvents.INSTANCE_RENTED,
+    });
 
     logger.info("Successfully schedule check");
   } catch (error) {
@@ -79,9 +80,12 @@ scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
       await orbitSphereDatabase.indexer.getIndexedTerminationEvent();
 
     /// Grabbing from block
-    const fromBlock = terminationIndex
-      ? Number(terminationIndex.blockNumber)
-      : Number(environment.ORBIT_SPHERE_CONTRACT_DEPLOYED_ON_BLOCK);
+    const fromBlock = (() => {
+      const source = terminationIndex
+        ? Number(terminationIndex.blockNumber)
+        : Number(environment.ORBIT_SPHERE_CONTRACT_DEPLOYED_ON_BLOCK);
+      return source + 1;
+    })();
 
     /// Grabbing latest block
     const latestBlock = await orbitsphere.getLastBlockNumber();
@@ -120,13 +124,11 @@ scheduler.scheduleJob(INDEX_SCHEDULER_ON, async () => {
         }
       );
     }
-    /// If no events found
-    else {
-      await orbitSphereDatabase.indexer.indexBlockNumber({
-        blockNumber: BigInt(latestBlock),
-        event: OrbitSphereEvents.INSTANCE_TERMINATED,
-      });
-    }
+    /// Update the latest block
+    await orbitSphereDatabase.indexer.indexBlockNumber({
+      blockNumber: BigInt(latestBlock),
+      event: OrbitSphereEvents.INSTANCE_TERMINATED,
+    });
 
     logger.info("Successfully schedule check");
   } catch (error) {
