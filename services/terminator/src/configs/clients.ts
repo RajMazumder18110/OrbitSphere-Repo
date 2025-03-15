@@ -7,7 +7,7 @@ import { environment } from "./environments";
 import { TerminationMessageConsumer } from "@orbitsphere/broker";
 
 /// Logger
-export const logger = createOrbitSphereLogger("events");
+export const logger = createOrbitSphereLogger("terminator");
 
 /// Database
 export const orbitSphereDatabase = new OrbitSphereDatabase(
