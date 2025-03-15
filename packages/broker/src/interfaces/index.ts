@@ -12,6 +12,7 @@ export type RentalEventPayload = {
 
 export type TerminateEventPayload = {
   region: string;
+  sphereId: string;
   instanceId: string;
   actualCost: string;
   timeConsumed: string;

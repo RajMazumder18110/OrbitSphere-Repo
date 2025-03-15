@@ -22,7 +22,8 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
       });
 
       await orbitSphereTerminationEventProducer.publish({
-        region: instance?.region!.value,
+        sphereId: sphereId.toString(),
+        region: instance?.region!.value!,
         instanceId: instance?.instanceId!,
         actualCost: actualCost.toString(),
         timeConsumed: timeConsumed.toString(),
