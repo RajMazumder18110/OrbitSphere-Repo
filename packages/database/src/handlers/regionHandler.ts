@@ -8,9 +8,7 @@ export class OrbitSphereRegionsHandler {
   constructor(private connection: DBType) {}
 
   public async getActiveRegions() {
-    return this.connection.query.regionsTable.findMany({
-      where: eq(regionsTable.isEnabled, true),
-    });
+    return this.connection.query.regionsTable.findMany();
   }
 
   public async create(data: CreateRegionParams) {
