@@ -1,8 +1,10 @@
 "use client";
+/** @notice Library imports */
 import { useState } from "react";
 import { format } from "date-fns";
 import { CalendarClock } from "lucide-react";
-
+import { UseFormSetValue } from "react-hook-form";
+/// Local imports
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,10 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { UseFormSetValue } from "react-hook-form";
 import { LaunchInstanceSchema } from "@/schemas";
-
-const MINIUM_RENTAL_DURATION = 10;
 
 export function DateTimePicker({
   date,

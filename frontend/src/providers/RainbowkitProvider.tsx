@@ -28,10 +28,24 @@ const queryClient = new QueryClient();
 
 const RainbowkitProviderComponent = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handler = (interval?: NodeJS.Timer) => {
+    getIsAuthenticated().then((status) => {
+      if (status) {
+        setIsAuthenticated(() => (status ? true : false));
+        clearInterval(interval);
+      }
+    });
+  };
+
   useEffect(() => {
-    getIsAuthenticated().then((status) =>
-      setIsAuthenticated(() => (status ? true : false))
-    );
+    let interval: NodeJS.Timer | undefined;
+    /// Initial fetch
+    handler();
+    ///Start polling every minute
+    interval = setInterval(() => handler(interval), 5_000);
+    /// Clean up
+    return () => clearInterval(interval);
   }, []);
 
   return (

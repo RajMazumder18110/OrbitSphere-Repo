@@ -1,12 +1,11 @@
 "use client";
 /** @notice Library imports */
+import { useAccount } from "wagmi";
+import { RiLoader4Line } from "react-icons/ri";
 import { MdOutlineWallet } from "react-icons/md";
 import { WalletButton, ConnectButton } from "@rainbow-me/rainbowkit";
 /// Local imports
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
-import { useAccount } from "wagmi";
-import { RiLoader4Line } from "react-icons/ri";
 
 export const MetamaskConnectButton = () => {
   return (

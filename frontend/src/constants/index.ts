@@ -2,6 +2,7 @@ import { Hex } from "viem";
 /// Routes
 export const enum OrbitSphereRoutes {
   ROOT = "/",
+  RENT = "/rent",
   DASHBOARD = "/dashboard",
 }
 /// Environements ///

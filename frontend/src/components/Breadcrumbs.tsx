@@ -11,6 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { capitalize } from "@/lib/utils";
+import { OrbitSphereRoutes } from "@/constants";
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
@@ -21,11 +22,12 @@ export default function Breadcrumbs() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/">Home</Link>
+            <Link href={OrbitSphereRoutes.ROOT}>Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {pathSegments.map((segment, index) => {
-          const href = "/" + pathSegments.slice(0, index + 1).join("/");
+          const href =
+            OrbitSphereRoutes.ROOT + pathSegments.slice(0, index + 1).join("/");
           return (
             <div className="inline-flex items-center gap-1.5">
               <BreadcrumbSeparator />

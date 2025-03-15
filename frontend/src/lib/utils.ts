@@ -85,6 +85,9 @@ export const getDegree = (actualValue: number, totalValue: number) => {
 export const minifyAddress = (address?: string) =>
   address?.replace(address.substring(10, 32), "...");
 
+export const shotAddress = (address?: string) =>
+  address?.replace(address.substring(4, 38), "...");
+
 export const toBytes32 = (value: string) =>
   padHex(stringToHex(value, { size: 32 }), { dir: "right" });
 
