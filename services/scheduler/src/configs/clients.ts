@@ -1,5 +1,8 @@
 /** @notice Library imports */
-import { RentalMessageConsumer } from "@orbitsphere/broker";
+import {
+  RentalMessageConsumer,
+  TerminationMessageConsumer,
+} from "@orbitsphere/broker";
 import { createOrbitSphereLogger } from "@orbitsphere/logger";
 /// Local imports
 import { environment } from "./environments";
@@ -19,6 +22,11 @@ export const orbitsphereContract = new OrbitSphere(
 );
 
 /// Queues
+export const terminationConsumer = new TerminationMessageConsumer(
+  "@orbitsphere-termination-scheduler",
+  [environment.KAFKA_CONNECTION_URL],
+  "termination-scheduler-group-1"
+);
 export const rentalConsumer = new RentalMessageConsumer(
   "@orbitsphere-termination-scheduler",
   [environment.KAFKA_CONNECTION_URL],

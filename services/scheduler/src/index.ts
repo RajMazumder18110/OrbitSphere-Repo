@@ -4,6 +4,7 @@ import {
   logger,
   orbitsphereContract,
   rentalConsumer,
+  terminationConsumer,
   terminationScheduler,
 } from "@/configs/clients";
 
@@ -29,6 +30,16 @@ await rentalConsumer.consume(async (payload) => {
   });
 
   logger.info("Successfully scheduled termination request", {
+    sphereId: payload.sphereId,
+  });
+});
+
+await terminationConsumer.consume(async (payload) => {
+  logger.info("Processing termination cancel schedule payload", payload);
+  /// Adding into scheduler
+  await terminationScheduler.cancel(payload.sphereId);
+
+  logger.info("Successfully canceled termination schedule request", {
     sphereId: payload.sphereId,
   });
 });
