@@ -7,7 +7,7 @@ import { environment } from "./environments";
 import { RentalMessageConsumer } from "@orbitsphere/broker";
 
 /// Logger
-export const logger = createOrbitSphereLogger("events");
+export const logger = createOrbitSphereLogger("provisioner");
 
 /// Database
 export const orbitSphereDatabase = new OrbitSphereDatabase(
