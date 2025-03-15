@@ -27,11 +27,14 @@ export const calculateRefundAmount = (instance: IInstance): number => {
   if (elapsedTime >= totalDuration) return 0; // No refund if fully used
   if (elapsedTime <= 0) return Number(formatUnits(instance.totalCost, 6)); // Full refund if not started
 
-  const usedCost =
-    elapsedTime * Number(formatUnits(instance.sphere.hourlyRate, 6));
+  const usedCost = Number(
+    (elapsedTime * Number(formatUnits(instance.sphere.hourlyRate, 6))).toFixed(
+      6
+    )
+  );
   const refundAmount = Number(formatUnits(instance.totalCost, 6)) - usedCost;
 
-  return Math.max(Number(refundAmount.toFixed(2)), 0); // Ensure refund is not negative
+  return Math.max(Number(refundAmount.toFixed(6)), 0); // Ensure refund is not negative
 };
 
 export const isInstanceTerminated = (instance: IInstance): boolean => {

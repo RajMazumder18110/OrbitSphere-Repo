@@ -47,7 +47,7 @@ const USDCConsumedCard = ({ instance }: { instance: IInstance }) => {
           <CardDescription>
             {(
               Number(formatUnits(instance.totalCost, 6)) - refundAmount
-            ).toFixed(2)}{" "}
+            ).toFixed(4)}{" "}
             USDC
           </CardDescription>
         </div>

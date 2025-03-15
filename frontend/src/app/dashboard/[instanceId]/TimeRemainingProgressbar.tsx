@@ -11,6 +11,7 @@ const TimeRemainingProgressbar = ({ instance }: { instance: IInstance }) => {
 
   const handleFetch = (interval?: NodeJS.Timer) => {
     const p = getCompletionPercentage(instance);
+    setPercentage(p);
 
     /// If totaly complete
     if (p === 100) {
