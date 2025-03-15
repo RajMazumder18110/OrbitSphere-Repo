@@ -7,7 +7,7 @@ import { TerminationScheduler } from "@orbitsphere/scheduler";
 import { OrbitSphere } from "@orbitsphere/blockchain";
 
 /// Logger
-export const logger = createOrbitSphereLogger("events");
+export const logger = createOrbitSphereLogger("scheduler");
 
 /// Scheduler
 export const terminationScheduler = new TerminationScheduler();
