@@ -143,8 +143,8 @@ const SingleInstanceDetails = async ({
               <LuCalendarClock className="text-2xl" />
               <h1>
                 {instance.status === "TERMINATED"
-                  ? instance.terminatedOn!.toString()
-                  : instance.willBeEndOn.toString()}
+                  ? instance.terminatedOn!.toLocaleString()
+                  : instance.willBeEndOn.toLocaleString()}
               </h1>
               {instance.status === "RUNNING" && (
                 <InstanceStatus
