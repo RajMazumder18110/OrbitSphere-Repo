@@ -3,16 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaMemory } from "react-icons/fa";
 import { IoGitNetwork } from "react-icons/io5";
-import { TbClockPlay } from "react-icons/tb";
 import { BsFillCpuFill } from "react-icons/bs";
-import { IoLogoUsd, IoMdGlobe } from "react-icons/io";
+import { IoMdGlobe } from "react-icons/io";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import { LuCalendarClock, LuServer } from "react-icons/lu";
 import { MdOutlineRadioButtonChecked } from "react-icons/md";
 /// Local imports
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardDescription,
@@ -49,6 +46,7 @@ import { getSphereByInstanceIdWithServerAction } from "@/actions/database";
 import TimeRemainingProgressbar from "./TimeRemainingProgressbar";
 import TimeRemainingCard from "./TimeRemainingCard";
 import USDCConsumedCard from "./USDCConsumedCard";
+import TerminateTime from "./TerminateTime";
 
 /// Type
 interface SingleInstanceDetailsProps {
@@ -141,11 +139,11 @@ const SingleInstanceDetails = async ({
           <section className="w-full flex flex-col gap-5">
             <div className="flex items-center gap-3">
               <LuCalendarClock className="text-2xl" />
-              <h1>
-                {instance.status === "TERMINATED"
-                  ? instance.terminatedOn!.toLocaleString()
-                  : instance.willBeEndOn.toLocaleString()}
-              </h1>
+              <TerminateTime
+                status={instance.status}
+                willBeEndOn={instance.willBeEndOn}
+                terminatedOn={instance.terminatedOn}
+              />
               {instance.status === "RUNNING" && (
                 <InstanceStatus
                   instanceId={instance.instanceId}
