@@ -47,7 +47,7 @@ const SpheresList = async (data: SpheresListProps) => {
           </h1>
         </div>
       )}
-      <section className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4">
+      <section className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4">
         {instances.map((instance) => (
           <Link
             href={`${OrbitSphereRoutes.DASHBOARD}/${instance.instanceId}`}

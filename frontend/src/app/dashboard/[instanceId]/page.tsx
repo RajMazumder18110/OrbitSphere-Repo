@@ -225,14 +225,7 @@ const SingleInstanceDetails = async ({
         </section>
 
         <section className="dark grid grid-cols-1 sm:grid-cols-3 gap-5 text-center">
-          <RadialChart
-            status={instance.status}
-            value={refundAmount}
-            circleFillDeg={getDegree(
-              refundAmount,
-              Number(formatUnits(instance.totalCost, 6))
-            )}
-          />
+          <RadialChart instance={instance} />
           <UtilizationChart data={utilizationData} />
         </section>
       </div>

@@ -37,7 +37,7 @@ export default function UtilizationChart({
     <Card className="dark col-span-2">
       <CardHeader>
         <CardTitle>Memory & CPU Utilization</CardTitle>
-        <CardDescription>Last 30 minutes</CardDescription>
+        <CardDescription>(Coming soon)</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

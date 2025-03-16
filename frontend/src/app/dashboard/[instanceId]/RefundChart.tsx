@@ -7,6 +7,8 @@ import {
   RadialBar,
   RadialBarChart,
 } from "recharts";
+import { useEffect, useState } from "react";
+import { InstanceStatus } from "@orbitsphere/database/schemas";
 /// Local imports
 import {
   Card,
@@ -16,21 +18,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { InstanceStatus } from "@orbitsphere/database/schemas";
-
-/// Props Type
-interface RadialChartProps {
-  value: number;
-  status: InstanceStatus;
-  circleFillDeg: number;
-}
+import { calculateRefundAmount, getDegree, IInstance } from "@/lib/utils";
+import { formatUnits } from "viem";
 
 export default function RadialChartChart({
-  value,
-  status,
-  circleFillDeg,
-}: RadialChartProps) {
-  const chartData = [{ browser: "safari", usdc: value, fill: "white" }];
+  instance,
+}: {
+  instance: IInstance;
+}) {
+  const [refundAmount, setRefundAmount] = useState(360);
+  const chartData = [{ browser: "safari", usdc: refundAmount, fill: "white" }];
 
   const chartConfig = {
     usdc: {
@@ -42,14 +39,37 @@ export default function RadialChartChart({
     },
   } satisfies ChartConfig;
 
+  const handleFetch = (interval?: NodeJS.Timer) => {
+    const p = calculateRefundAmount(instance);
+    setRefundAmount(p);
+
+    /// If totaly complete
+    if (p === 0) {
+      clearInterval(interval);
+    }
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timer | undefined;
+
+    /// Initial fetch
+    handleFetch();
+
+    ///Start polling every minute
+    interval = setInterval(() => handleFetch(interval), 60_000);
+
+    /// Clean up
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Card className="dark col-span-1">
       <CardHeader className="items-center pb-0">
         <CardTitle>
-          USDC {status === "TERMINATED" ? "Refunded" : "Refund"}
+          USDC {instance.status === "TERMINATED" ? "Refunded" : "Refund"}
         </CardTitle>
         <CardDescription>
-          {status === "TERMINATED"
+          {instance.status === "TERMINATED"
             ? "The USDC refund has been processed on-chain."
             : "Upon terminating your sphere, you will receive a refund in USDC."}
         </CardDescription>
@@ -62,7 +82,10 @@ export default function RadialChartChart({
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={circleFillDeg}
+            endAngle={getDegree(
+              refundAmount,
+              Number(formatUnits(instance.totalCost, 6))
+            )}
             innerRadius={80}
             outerRadius={110}
           >
