@@ -71,11 +71,11 @@ const InstanceStatus = ({ instanceId, region }: InstanceStatusProps) => {
       <Tooltip>
         <TooltipTrigger className="cursor-pointer">
           {isError ? (
-            <MdError className="text-red-500 text-xl" />
+            <MdError className="text-red-500 text-md md:text-xl" />
           ) : isSuccess ? (
-            <FaCircleCheck className="text-green-500 text-xl" />
+            <FaCircleCheck className="text-green-500 text-md md:text-xl" />
           ) : (
-            <PiSpinnerBold className="animate-spin text-xl" />
+            <PiSpinnerBold className="animate-spin text-md md:text-xl" />
           )}
         </TooltipTrigger>
         <TooltipContent>

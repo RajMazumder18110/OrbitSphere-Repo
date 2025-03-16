@@ -19,14 +19,7 @@ import {
 } from "@/components/ui/card";
 import RadialChart from "./RefundChart";
 import UtilizationChart from "./UtilizationChart";
-import {
-  calculateRefundAmount,
-  capitalize,
-  getCompletionPercentage,
-  getDegree,
-  getTimeRemaining,
-  isInstanceTerminated,
-} from "@/lib/utils";
+import { capitalize, isInstanceTerminated } from "@/lib/utils";
 import { getUtilizationData } from "@/actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,7 +33,6 @@ import {
 import CopyButton from "@/components/CopyButton";
 import Terminate from "./Terminate";
 import ServerNotFoundImage from "@/assets/not-found.svg";
-import { formatUnits } from "viem";
 import InstanceStatus from "./InstanceStatus";
 import { getSphereByInstanceIdWithServerAction } from "@/actions/database";
 import TimeRemainingProgressbar from "./TimeRemainingProgressbar";
@@ -98,16 +90,15 @@ const SingleInstanceDetails = async ({
   const utilizationData = await getUtilizationData();
   /// Calculating data
   const isTerminated = isInstanceTerminated(instance);
-  const refundAmount = calculateRefundAmount(instance);
 
   return (
     <Dialog>
-      <div className="w-full flex flex-col gap-10 mt-3">
-        <div className="flex flex-col gap-7">
+      <div className="w-full flex flex-col gap-10 my-5">
+        <div className="w-full flex flex-col gap-7">
           <Breadcrumbs />
-          <header className="flex justify-between gap-3 items-center">
-            <div className="flex gap-3 items-center">
-              <h1 className="text-3xl font-semibold font-[family-name:var(--font-geist-mono)]">
+          <header className="w-full flex flex-col md:flex-row justify-between gap-y-5 md:gap-x-3">
+            <div className="flex gap-3">
+              <h1 className="text-xl md:text-3xl font-semibold font-[family-name:var(--font-geist-mono)]">
                 &gt; {instanceId}
               </h1>
               <MdOutlineRadioButtonChecked
@@ -126,7 +117,7 @@ const SingleInstanceDetails = async ({
                   <Button
                     variant="secondary"
                     type="button"
-                    className="cursor-pointer"
+                    className="cursor-pointer grow md:grow-0"
                   >
                     Connect
                   </Button>
@@ -224,7 +215,7 @@ const SingleInstanceDetails = async ({
           </Card>
         </section>
 
-        <section className="dark grid grid-cols-1 sm:grid-cols-3 gap-5 text-center">
+        <section className="dark w-full grid grid-cols-1 sm:grid-cols-3 gap-y-5 sm:gap-x-5 text-center">
           <RadialChart instance={instance} />
           <UtilizationChart data={utilizationData} />
         </section>

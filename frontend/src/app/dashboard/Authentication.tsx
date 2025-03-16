@@ -27,7 +27,7 @@ const Authentication = () => {
             <Image
               src={OrbitSphereIcon}
               alt="OrbitSphere"
-              className="absolute hidden sm:block inset-0 -z-10 opacity-50"
+              className="absolute hidden sm:block inset-0 -z-10 opacity-35"
             />
             <section className="flex flex-col items-center gap-25">
               <Card className="dark">

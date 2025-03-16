@@ -63,7 +63,7 @@ export default function RadialChartChart({
   }, []);
 
   return (
-    <Card className="dark col-span-1">
+    <Card className="dark w-full">
       <CardHeader className="items-center pb-0">
         <CardTitle>
           USDC {instance.status === "TERMINATED" ? "Refunded" : "Refund"}

@@ -14,7 +14,7 @@ const Navbar = () => {
           <p className="font-semibold">OrbitSphere</p>
         </header>
       </Link>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-0">
         <AccountButton />
         <Link href={OrbitSphereRoutes.RENT}>
           <Button className="dark cursor-pointer" variant="link">

@@ -22,7 +22,12 @@ const TerminateTime = ({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger className="cursor-pointer">
-          <h1>
+          <h1 className="text-sm md:hidden">
+            {status === "TERMINATED"
+              ? `${terminatedOn!.toLocaleDateString()} ${terminatedOn!.toTimeString()}`
+              : `${willBeEndOn!.toLocaleDateString()} ${willBeEndOn!.toTimeString()}`}
+          </h1>
+          <h1 className="text-sm hidden md:block md:text-lg">
             {status === "TERMINATED"
               ? terminatedOn!.toString()
               : willBeEndOn.toString()}

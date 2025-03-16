@@ -81,7 +81,7 @@ const Terminate = ({ sphereId }: { sphereId: bigint }) => {
         <Button
           type="button"
           variant="destructive"
-          className="dark cursor-pointer"
+          className="dark grow md:grow-0 cursor-pointer"
           onClick={onTerminate}
         >
           Terminate
