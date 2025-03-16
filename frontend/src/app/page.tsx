@@ -19,10 +19,13 @@ import OrbitSphereIcon from "@/assets/orbitsphere.svg";
 import Image from "next/image";
 import { formatUnits } from "viem";
 import { getAllSpheresWithServerAction } from "@/actions/database";
+import { redirect } from "next/navigation";
+import { OrbitSphereRoutes } from "@/constants";
 
 export default async function Home() {
-  const instances = await getAllSpheresWithServerAction();
+  redirect(OrbitSphereRoutes.DASHBOARD);
 
+  const instances = await getAllSpheresWithServerAction();
   return (
     <>
       <Navbar />
