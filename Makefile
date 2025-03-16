@@ -16,9 +16,8 @@ dev:
 	@bunx dotenv -e .env -- bun run --filter "*" dev 
 
 # Docker builds
-build:
-	@bun run --filter "*" build
-
-	@docker build -t raj18110mazumder/orbitsphere-events -f services/events/Dockerfile services/events
-	@docker build -t raj18110mazumder/orbitsphere-provisioner -f services/provisioner/Dockerfile services/provisioner
-	@docker build -t raj18110mazumder/orbitsphere-terminator -f services/terminator/Dockerfile services/terminator
+docker-build:
+	@docker build --build-arg SERVICE_NAME=indexer -t raj18110mazumder/orbitsphere-indexer -f docker/Dockerfile .
+	@docker build --build-arg SERVICE_NAME=scheduler -t raj18110mazumder/orbitsphere-scheduler -f docker/Dockerfile .
+	@docker build --build-arg SERVICE_NAME=terminator -t raj18110mazumder/orbitsphere-terminator -f docker/Dockerfile .
+	@docker build --build-arg SERVICE_NAME=provisioner -t raj18110mazumder/orbitsphere-provisioner -f docker/Dockerfile .
