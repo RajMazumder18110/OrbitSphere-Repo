@@ -4,6 +4,15 @@ const orbitSphereAbi = [
     stateMutability: "nonpayable",
     type: "constructor",
   },
+  { inputs: [], name: "AccessControlBadConfirmation", type: "error" },
+  {
+    inputs: [
+      { internalType: "address", name: "account", type: "address" },
+      { internalType: "bytes32", name: "neededRole", type: "bytes32" },
+    ],
+    name: "AccessControlUnauthorizedAccount",
+    type: "error",
+  },
   {
     inputs: [
       { internalType: "address", name: "sender", type: "address" },
@@ -71,16 +80,6 @@ const orbitSphereAbi = [
   {
     inputs: [{ internalType: "bytes32", name: "region", type: "bytes32" }],
     name: "OrbitSphere__UnavailableRegion",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "owner", type: "address" }],
-    name: "OwnableInvalidOwner",
-    type: "error",
-  },
-  {
-    inputs: [{ internalType: "address", name: "account", type: "address" }],
-    name: "OwnableUnauthorizedAccount",
     type: "error",
   },
   {
@@ -299,20 +298,61 @@ const orbitSphereAbi = [
   {
     anonymous: false,
     inputs: [
+      { indexed: true, internalType: "bytes32", name: "role", type: "bytes32" },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "previousAdminRole",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "newAdminRole",
+        type: "bytes32",
+      },
+    ],
+    name: "RoleAdminChanged",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "bytes32", name: "role", type: "bytes32" },
       {
         indexed: true,
         internalType: "address",
-        name: "previousOwner",
+        name: "account",
         type: "address",
       },
       {
         indexed: true,
         internalType: "address",
-        name: "newOwner",
+        name: "sender",
         type: "address",
       },
     ],
-    name: "OwnershipTransferred",
+    name: "RoleGranted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "bytes32", name: "role", type: "bytes32" },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "RoleRevoked",
     type: "event",
   },
   {
@@ -329,6 +369,34 @@ const orbitSphereAbi = [
     ],
     name: "Transfer",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "DEFAULT_ADMIN_ROLE",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ORBIT_SPHERE_DEPLOYER",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ORBIT_SPHERE_MANAGER",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ORBIT_SPHERE_TERMINATOR",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [],
@@ -381,6 +449,15 @@ const orbitSphereAbi = [
     name: "balanceOf",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256[]", name: "sphereIds", type: "uint256[]" },
+    ],
+    name: "forceTerminateSpheres",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -520,9 +597,36 @@ const orbitSphereAbi = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "bytes32", name: "role", type: "bytes32" }],
+    name: "getRoleAdmin",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "address", name: "holder", type: "address" }],
     name: "getSphereIdsByTenant",
     outputs: [{ internalType: "uint256[]", name: "ids", type: "uint256[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "account", type: "address" },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "account", type: "address" },
+    ],
+    name: "hasRole",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
     stateMutability: "view",
     type: "function",
   },
@@ -560,13 +664,6 @@ const orbitSphereAbi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
     name: "ownerOf",
     outputs: [{ internalType: "address", name: "", type: "address" }],
@@ -590,8 +687,11 @@ const orbitSphereAbi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "renounceOwnership",
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "callerConfirmation", type: "address" },
+    ],
+    name: "renounceRole",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -603,7 +703,17 @@ const orbitSphereAbi = [
       { internalType: "uint256", name: "rentalDuration", type: "uint256" },
       { internalType: "bytes", name: "sshPublicKey", type: "bytes" },
     ],
-    name: "rentOrbitSphereInstance",
+    name: "rentSphere",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "role", type: "bytes32" },
+      { internalType: "address", name: "account", type: "address" },
+    ],
+    name: "revokeRole",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -657,7 +767,7 @@ const orbitSphereAbi = [
   },
   {
     inputs: [{ internalType: "uint256", name: "sphereId", type: "uint256" }],
-    name: "terminateOrbitSphereInstance",
+    name: "terminateSphere",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -676,13 +786,6 @@ const orbitSphereAbi = [
       { internalType: "uint256", name: "", type: "uint256" },
     ],
     name: "transferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
-    name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

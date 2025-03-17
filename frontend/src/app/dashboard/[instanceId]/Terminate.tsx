@@ -50,7 +50,7 @@ const Terminate = ({ sphereId }: { sphereId: bigint }) => {
         account: address,
         address: ORBITSPHERE,
         abi: orbitSphereAbi,
-        functionName: "terminateOrbitSphereInstance",
+        functionName: "terminateSphere",
         args: [sphereId],
       });
 

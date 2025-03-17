@@ -134,7 +134,7 @@ const LaunchInstanceForm = ({
         account: address,
         address: ORBITSPHERE,
         abi: orbitSphereAbi,
-        functionName: "rentOrbitSphereInstance",
+        functionName: "rentSphere",
         args: [
           params.region,
           params.instance,
