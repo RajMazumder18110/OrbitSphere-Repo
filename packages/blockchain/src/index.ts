@@ -1,5 +1,6 @@
 /** @notice Library imports */
 import {
+  Wallet,
   Contract,
   toUtf8String,
   JsonRpcProvider,
@@ -12,26 +13,41 @@ import orbitSphereAbi from "./orbitSphereAbi";
 import { OrbitSphereEvents } from "./constants";
 
 class OrbitSphere {
+  private target: string;
   private orbitSphere: Contract;
+  private provider: JsonRpcProvider | WebSocketProvider;
 
   constructor(target: string, rpcOrWsUrl: string) {
     /// Creating provider
-    let provider: JsonRpcProvider | WebSocketProvider;
     if (rpcOrWsUrl.startsWith("http")) {
-      provider = new JsonRpcProvider(rpcOrWsUrl);
+      this.provider = new JsonRpcProvider(rpcOrWsUrl);
     } else {
-      provider = new WebSocketProvider(rpcOrWsUrl);
+      this.provider = new WebSocketProvider(rpcOrWsUrl);
     }
     /// Initializing contract
-    this.orbitSphere = new Contract(target, orbitSphereAbi, provider);
+    this.target = target;
+    this.orbitSphere = new Contract(target, orbitSphereAbi, this.provider);
   }
 
   public async getLastBlockNumber() {
-    return this.orbitSphere.runner?.provider?.getBlockNumber()!;
+    return this.provider.getBlockNumber();
   }
 
-  public async forceTerminate(sphereId: string) {
-    console.log("FORCE TERMINATED", sphereId);
+  public async forceTerminateSphere(
+    sphereId: string,
+    privKey: string
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      /// Initializing signer and contract
+      const signer = new Wallet(privKey, this.provider);
+      this.orbitSphere = new Contract(this.target, orbitSphereAbi, signer);
+
+      /// Terminating
+      this.orbitSphere
+        .forceTerminateSpheres([sphereId])
+        .then((tx) => resolve(tx.hash))
+        .catch((err) => reject(err));
+    });
   }
 
   public onOrbitSphereInstanceRented(
