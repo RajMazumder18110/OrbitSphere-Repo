@@ -7,6 +7,7 @@ import {
   terminationConsumer,
   terminationScheduler,
 } from "@/configs/clients";
+import { environment } from "@/configs/environments";
 
 await rentalConsumer.consume(async (payload) => {
   logger.info("Processing termination schedule payload", payload);
@@ -17,8 +18,12 @@ await rentalConsumer.consume(async (payload) => {
     handler: async (sphereId) => {
       try {
         /// Force terminate instance
-        await orbitsphereContract.forceTerminate(sphereId);
+        const hash = await orbitsphereContract.forceTerminateSphere(
+          sphereId,
+          environment.ORBIT_SPHERE_TERMINATOR_PRIV_KEY
+        );
         logger.info("Successfully force terminated", {
+          hash,
           sphereId: payload.sphereId,
         });
       } catch (error) {
