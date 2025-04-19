@@ -7,14 +7,17 @@ WORKDIR /app
 # Copy the rest of the application
 COPY . .
 
+# Install dependencies
+RUN bun install
+
 # Set working directory to the ${SERVICE_NAME} service
 WORKDIR /app/backend
 
 # Build the application
-RUN bun run build
+RUN bun build index.ts --outdir ./dist --target node
 
 # Use a minimal Alpine-based Bun image for the final runtime
-FROM oven/bun:alpine AS runner
+FROM node:23-alpine AS runner
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -35,4 +38,4 @@ RUN chown -R orbitsphere:orbitsphere /app
 USER orbitsphere
 
 # Start the application
-CMD ["bun", "run", "/app/index.js"]
+CMD ["node", "/app/index.js"]
