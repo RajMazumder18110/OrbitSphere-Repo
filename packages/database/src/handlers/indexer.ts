@@ -1,6 +1,6 @@
 /** @notice library imports */
 import { desc, eq } from "drizzle-orm";
-import { OrbitSphereEvents } from "../../services/OrbitSphere";
+import { OrbitSphereEvents } from "@orbitsphere/blockchain";
 /// Local imports
 import {
   tenantsTable,

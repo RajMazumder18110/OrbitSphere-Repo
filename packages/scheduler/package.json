@@ -1,0 +1,18 @@
+{
+  "name": "@orbitsphere/scheduler",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node-schedule": "^2.1.7"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "node-schedule": "^2.1.1"
+  }
+}

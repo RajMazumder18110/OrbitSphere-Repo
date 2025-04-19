@@ -1,6 +1,6 @@
 /** @notice library imports */
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { OrbitSphereEvents } from "../../services/OrbitSphere";
+import { OrbitSphereEvents } from "@orbitsphere/blockchain";
 /// Local imports
 import { timestamps, blockchainFields } from "./common";
 

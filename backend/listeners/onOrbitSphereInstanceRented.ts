@@ -1,9 +1,10 @@
 /** @notice Library imports */
-import { fromBytes, fromBytes32 } from "../services/OrbitSphere";
+import type { LaunchInstanceParams } from "@orbitsphere/aws";
+import { fromBytes, fromBytes32 } from "@orbitsphere/blockchain";
 import type {
   CreateInstanceParams,
   CreateRentalLogParams,
-} from "../database/schemas";
+} from "@orbitSphere/database/schemas";
 /// Local imports
 import {
   logger,
@@ -12,7 +13,6 @@ import {
   orbitSphereDatabase,
   terminationScheduler,
 } from "../configs/clients";
-import type { LaunchInstanceParams } from "../services/OrbitSphereAWSInstance";
 import { environment } from "../configs/environments";
 
 await orbitsphere.onOrbitSphereInstanceRented(
@@ -93,7 +93,7 @@ await orbitsphere.onOrbitSphereInstanceRented(
         willBeEndOn: new Date(Number(willBeEndOn.toString()) * 1_000),
       } satisfies CreateInstanceParams);
 
-      logger.info("Processing termination schedule payload", payload);
+      logger.info("Processing termination schedule payload", { sphereId });
       /// Adding into scheduler
       await terminationScheduler.schedule({
         sphereId: sphereId.toString(),

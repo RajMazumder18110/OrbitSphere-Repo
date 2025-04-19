@@ -2,7 +2,8 @@
 import type {
   CreateTerminationLogParams,
   TerminateInstanceParams,
-} from "../database/schemas";
+} from "@orbitSphere/database/schemas";
+import type { RunningInstanceParams } from "@orbitsphere/aws";
 /// Local imports
 import {
   logger,
@@ -11,7 +12,6 @@ import {
   orbitSphereDatabase,
   terminationScheduler,
 } from "../configs/clients";
-import type { RunningInstanceParams } from "../services/OrbitSphereAWSInstance";
 
 await orbitsphere.onOrbitSphereInstanceTerminated(
   async (tenant, sphereId, actualCost, timeConsumed, refundAmount, payload) => {
@@ -66,7 +66,9 @@ await orbitsphere.onOrbitSphereInstanceTerminated(
         instanceId: instance?.instanceId,
       });
 
-      logger.info("Processing termination cancel schedule payload", payload);
+      logger.info("Processing termination cancel schedule payload", {
+        sphereId,
+      });
       /// Adding into scheduler
       await terminationScheduler.cancel(sphereId.toString());
 

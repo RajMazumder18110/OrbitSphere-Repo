@@ -1,11 +1,11 @@
 /** @notice Library imports */
-import { OrbitSphereDatabase } from "../database/handlers";
+import { OrbitSphere } from "@orbitsphere/blockchain";
+import { OrbitSphereAWSInstance } from "@orbitsphere/aws";
+import { createOrbitSphereLogger } from "@orbitsphere/logger";
+import { TerminationScheduler } from "@orbitsphere/scheduler";
+import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 /// Local imports
 import { environment } from "./environments";
-import { createOrbitSphereLogger } from "./logger";
-import { OrbitSphere } from "../services/OrbitSphere";
-import OrbitSphereAWSInstance from "../services/OrbitSphereAWSInstance";
-import { TerminationScheduler } from "../services/TerminationScheduler";
 
 /// Scheduler
 export const terminationScheduler = new TerminationScheduler();

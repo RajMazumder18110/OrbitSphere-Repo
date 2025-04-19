@@ -1,5 +1,5 @@
 /** @notice Library imports */
-import OrbitSphereAWSInstance from "@orbitsphere/aws";
+import { OrbitSphereAWSInstance } from "@orbitsphere/aws";
 import { OrbitSphereDatabase } from "@orbitsphere/database/handlers";
 /// Local imports
 import {

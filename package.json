@@ -2,6 +2,11 @@
   "name": "@orbitsphere/repo",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/*"
+  ],
   "scripts": {
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -12,18 +17,9 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@types/bun": "latest",
     "dotenv-cli": "^8.0.0",
-    "drizzle-kit": "^0.31.0"
+    "drizzle-kit": "^0.30.5"
   },
   "peerDependencies": {
     "typescript": "^5.8.2"
-  },
-  "dependencies": {
-    "@aws-sdk/client-ec2": "^3.787.0",
-    "@types/node-schedule": "^2.1.7",
-    "drizzle-orm": "^0.42.0",
-    "ethers": "^6.13.5",
-    "node-schedule": "^2.1.1",
-    "pg": "^8.14.1",
-    "winston": "^3.17.0"
   }
 }

@@ -1,6 +1,6 @@
 /** @notice Library imports */
 import scheduler from "node-schedule";
-import { OrbitSphereEvents } from "../services/OrbitSphere";
+import { OrbitSphereEvents } from "@orbitsphere/blockchain";
 /// Local imports
 import { environment } from "../configs/environments";
 import { logger, orbitsphere, orbitSphereDatabase } from "../configs/clients";

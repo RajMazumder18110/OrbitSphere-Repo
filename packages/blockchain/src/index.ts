@@ -9,8 +9,8 @@ import {
   type ContractEventPayload,
 } from "ethers";
 /// Local imports
-import orbitSphereAbi from "../constants/orbitSphereAbi";
-import { OrbitSphereEvents } from "../constants/contracts";
+import orbitSphereAbi from "./orbitSphereAbi";
+import { OrbitSphereEvents } from "./constants";
 
 class OrbitSphere {
   private target: string;

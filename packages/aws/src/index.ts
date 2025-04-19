@@ -17,22 +17,15 @@ import {
   type DescribeInstanceStatusCommandInput,
 } from "@aws-sdk/client-ec2";
 /// Local imports
-import { getCustomSSHKeySetupCommand } from "../utils";
-import { AWSImageIds, AWSSecurityGroups } from "../constants/aws";
+import {
+  AWSImageIds,
+  AWSSecurityGroups,
+  getCustomSSHKeySetupCommand,
+} from "./utils";
+import type { LaunchInstanceParams, RunningInstanceParams } from "./types";
+export * from "./types";
 
-/// Types
-/// Types
-export type LaunchInstanceParams = {
-  region: string;
-  sshPublicKey: string;
-  instanceType: string;
-};
-export type RunningInstanceParams = {
-  region: string;
-  instanceId: string;
-};
-
-class OrbitSphereAWSInstance {
+export class OrbitSphereAWSInstance {
   constructor(private accessKeyId: string, private secretAccessKey: string) {}
 
   public async getInstanceStatus(
@@ -184,5 +177,3 @@ class OrbitSphereAWSInstance {
     });
   }
 }
-
-export default OrbitSphereAWSInstance;
